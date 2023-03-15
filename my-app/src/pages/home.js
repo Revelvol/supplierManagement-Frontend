@@ -8,7 +8,7 @@ class Home extends React.Component {
 
     return (
       <div>
-        welcome to home
+        welcome home
       </div>
     );
   }
