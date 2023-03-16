@@ -50,7 +50,29 @@ function Login() {
             });
             navigate("/")
             } else {
-            console.log('Request failed:', response.status);
+                 if (response.ok) {
+            const data = await response.json();
+            // if response is ok, get the detail of the user 
+            const userDetail = await fetch(getUserDetailUrl, {
+                headers: {
+                    Authorization: `Token ${data.token}`
+                  }
+            });
+            const userDetailData = await userDetail.json(); 
+            signIn({
+                token: data.token,
+                expiresIn: 3600,
+                tokenType: "Token",
+                authState: userDetailData
+            });
+            navigate("/")
+            } else {
+                 // clear the form
+                    document.getElementById("email").value = "";
+                    document.getElementById("password").value = "";
+                    // show an alert to the user
+                    alert("Username or password is incorrect.");
+            }
             }
         
     };

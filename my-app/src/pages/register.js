@@ -58,7 +58,17 @@ function Register() {
         });
         navigate("/")
       } else {
-        console.log('Request failed:', response.status);
+        let alertMessage = "";
+        if(userData.email){
+          alertMessage = alertMessage + userData.email + "\n"
+          document.getElementById("email").value="";
+        };
+        if(userData.password){
+          alertMessage = alertMessage + userData.password
+          document.getElementById("password1").value="";
+          document.getElementById("password2").value="";
+        };
+        alert(alertMessage);
         }
       
   }
