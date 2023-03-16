@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const getTokenUrl = "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/token/";
 const getUserDetailUrl = "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/me/"
+const demoEmail  ="example123123@example.com"
+const demoPassword = "123123123"
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -12,7 +14,11 @@ function Login() {
     const signIn = useSignIn();
     const navigate = useNavigate(); 
    
-  
+    const handleDemo = () => {
+        setEmail(demoEmail);
+        setPassword(demoPassword);
+    }
+
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
@@ -101,7 +107,9 @@ function Login() {
             />
             </div>
             <button type="submit">Login</button>
+            
         </form>
+            <button type="button" onClick={handleDemo}>demo</button>
         <Link to="/register"> Register</Link>
         </div>
     );

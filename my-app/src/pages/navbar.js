@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 function Navbar () {
     const signOut = useSignOut(); 
     const auth = useAuthUser()
-    console.log(auth())
     return (
     <div>
         Navbar
