@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import { useIsAuthenticated, useSignIn } from "react-auth-kit";
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react'; 
+import { useSignIn } from "react-auth-kit";
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const getTokenUrl = "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/token/";
+const getUserDetailUrl = "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/me/"
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const sigIn = useSignIn();
+    const signIn = useSignIn();
     const navigate = useNavigate(); 
    
   
@@ -34,11 +35,18 @@ function Login() {
         
         if (response.ok) {
             const data = await response.json();
-            sigIn({
+            // if response is ok, get the detail of the user 
+            const userDetail = await fetch(getUserDetailUrl, {
+                headers: {
+                    Authorization: `Token ${data.token}`
+                  }
+            });
+            const userDetailData = await userDetail.json(); 
+            signIn({
                 token: data.token,
                 expiresIn: 3600,
                 tokenType: "Token",
-                authState: {email:email}
+                authState: userDetailData
             });
             navigate("/")
             } else {
@@ -72,6 +80,7 @@ function Login() {
             </div>
             <button type="submit">Login</button>
         </form>
+        <Link to="/register"> Register</Link>
         </div>
     );
     

@@ -1,17 +1,14 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { useAuthUser } from 'react-auth-kit';
 
-class Home extends React.Component {
-
-
-  render() {
-
-    return (
-      <div>
-        welcome home
-      </div>
-    );
-  }
+function Home () {
+  const auth = useAuthUser();
+  return (
+  <div>
+    <br></br>
+      Welcome Home {auth().name}
+  </div>
+  )
 }
 
 export default Home;
