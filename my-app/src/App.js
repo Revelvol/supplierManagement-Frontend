@@ -7,6 +7,7 @@ import { useIsAuthenticated } from 'react-auth-kit';
 import ProtectedRoutes from './pages/protectedRoutes';
 import Register from './pages/register';
 import Profile from './pages/profile';
+import SupplierManagement from './pages/supplierManagement';
 
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route element={<ProtectedRoutes auth={isAuth()}/>}>
           <Route path='/' element={<Home />}/>
           <Route path='/profile' element={<Profile/>}/>
+          <Route path='/supplier-management' element={<SupplierManagement/>}/>
         </Route>
       </Routes>
   </>

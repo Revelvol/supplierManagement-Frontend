@@ -9,6 +9,7 @@ function Navbar () {
         Navbar
         <Link to="/">Home</Link>
         <Link to="/profile">Profile </Link>
+        <Link to="/supplier-management">SupplierManagement</Link>
         <button onClick={() => signOut()}>SignOut </button>
     </div>
     )
