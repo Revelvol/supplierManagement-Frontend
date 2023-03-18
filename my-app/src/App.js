@@ -18,7 +18,7 @@ function App() {
 
   const isAuth = useIsAuthenticated(true);
   return (
-    
+   
     <QueryClientProvider client={queryClient}>
         <Routes>
         <Route path='/login' element={isAuth() ? <Navigate to="/" /> : <Login />} />
@@ -32,6 +32,7 @@ function App() {
         </Route>
       </Routes>
     </QueryClientProvider>
+   
   );
 }
 
