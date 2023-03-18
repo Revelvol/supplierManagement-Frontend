@@ -2,6 +2,7 @@
 import { useQuery, useQueries } from "react-query";
 import SupplierTables from "./tables/supplierTables";
 import React from "react";
+import SupplierForm from "./tables/supplierForm";
 
 const supplierUrl =
   "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
@@ -104,7 +105,9 @@ function SupplierManagement() {
   return (
     <div>
       supplier Management
-      <SupplierTables columns={columns} data={supplierData} />
+      <br></br>
+      <SupplierForm/>
+      <SupplierTables columns={columns} data={suppliersWithDocumentData} />
     </div>
   );
 }
