@@ -2,7 +2,7 @@
 import { useQuery, useQueries } from "react-query";
 import SupplierTables from "./tables/supplierTables";
 import React from "react";
-import SupplierForm from "./tables/supplierForm";
+import SupplierForm from "./forms/supplierForm";
 
 const supplierUrl =
   "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
@@ -74,10 +74,7 @@ function SupplierManagement() {
     })) || []
   );
 
-  console.log(documentQueries);
-  documentQueries.forEach((response) => {
-    console.log(response.data);
-  });
+
 
   // map the document data with the correct supplier data
   const suppliersWithDocumentData = supplierData?.map((supplier) => {
@@ -95,7 +92,6 @@ function SupplierManagement() {
     } catch (error) {}
   });
 
-  console.log(suppliersWithDocumentData);
 
   if (supplierLoading || documentQueries.some((query) => query.isLoading))
     return "Loading...";
