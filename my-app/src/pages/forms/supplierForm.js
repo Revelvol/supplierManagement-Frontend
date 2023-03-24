@@ -1,17 +1,34 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import supplierSchema from "../../validations/supplierValidation";
+import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
+import { useAuthHeader } from "react-auth-kit";
+
+const supplierUrl =
+  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
 
 function SupplierForm() {
   const [page, setPage] = useState(1);
-  let { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const token = useAuthHeader();
 
   useEffect(() => {
     window.scrollTo(0, 0); // scroll to top of page on page change
   }, [page]);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const supplierDocumentData = {
+      isoDocument: data.isoDocument[0],
+      gmpDocument: data.gmpDocument[0],
+      haccpDocument: data.haccpDocument[0],
+    };
+    console.log(supplierDocumentData)
+    await supplierDocumentSchema.validate(supplierDocumentData);
+    
+
+    setPage(1);
+    reset({})
+
   };
 
   const nextPage = () => {
@@ -23,9 +40,14 @@ function SupplierForm() {
   };
 
   const validateSupplierData = async (data) => {
-    // can use validate method to catch error 
-    const supplierData = data;
+    // can use validate method to catch error
+    const supplierData = {
+      name: data.name,
+      phone: data.phone,
+      location: data.location,
+    };
     const isValid = await supplierSchema.isValid(supplierData);
+
     if (isValid) {
       nextPage();
     } else {
@@ -77,14 +99,6 @@ function SupplierForm() {
             {...register("haccpDocument")}
             accept="application/pdf"
           />
-          <button onClick={prevPage}>Back</button>
-          <button onClick={nextPage}>Next</button>
-        </div>
-      )}
-      {page === 3 && (
-        <div>
-          <label htmlFor="email">Email</label>
-          <input {...register("email")} />
           <button onClick={prevPage}>Back</button>
           <button type="submit">Submit</button>
         </div>
