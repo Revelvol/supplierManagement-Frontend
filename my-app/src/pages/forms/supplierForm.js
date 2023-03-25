@@ -9,6 +9,7 @@ const supplierUrl =
 
 function SupplierForm() {
   const [page, setPage] = useState(1);
+  const [error, setError] = useState("");
   const { register, handleSubmit, reset } = useForm();
   const token = useAuthHeader();
 
@@ -22,13 +23,55 @@ function SupplierForm() {
       gmpDocument: data.gmpDocument[0],
       haccpDocument: data.haccpDocument[0],
     };
-    console.log(supplierDocumentData)
-    await supplierDocumentSchema.validate(supplierDocumentData);
-    
+    console.log(supplierDocumentData);
+    try {
+      await supplierDocumentSchema.validate(supplierDocumentData);
 
-    setPage(1);
-    reset({})
+      // post the suplier data
+      const supplierData = {
+        name: data.name,
+        phone: data.phone,
+        location: data.location,
+      };
 
+      const supplierResponse = await fetch(supplierUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token(),
+        },
+        body: JSON.stringify(supplierData),
+      });
+
+      if (supplierResponse.ok) {
+        // if response is good post the suplier document with the supplier id
+        const supplierResponseData = await supplierResponse.json();
+        const supplierId = supplierResponseData.id;
+        const supplierDocumentUrl = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`
+        console.log(supplierDocumentData)
+        const supplierDocumentResponse = await fetch(supplierDocumentUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token(),
+          },
+          body: supplierDocumentData,
+        })
+        const supplierDocumentResponseData = await supplierDocumentResponse.json()
+        console.log(supplierDocumentResponseData)
+      } else {
+        setError(
+          "Something When wrong with the supplier submision, please try Again"
+        );
+      }
+      // if response is not good set error
+
+      setPage(1);
+      setError("");
+      reset({});
+    } catch (error) {
+      setError(error.errors);
+    }
   };
 
   const nextPage = () => {
@@ -60,6 +103,8 @@ function SupplierForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {error !== "" && <div className="alert alert-danger">{error}</div>}
+
       {page === 1 && (
         <div>
           <label htmlFor="name">Name</label>

@@ -27,7 +27,8 @@ function Profile() {
         body: JSON.stringify(payload)
     }) ;
     const data = await response.json()
-    console.log(JSON.stringify(payload))
+
+    console.log(data)
     if(response.ok){
         alert("sucessfully changed")
         setIsEditable(false);
