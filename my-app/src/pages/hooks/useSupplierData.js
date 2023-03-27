@@ -1,0 +1,1 @@
+//  use the usequery hook to fetch the individual data of the usequery 

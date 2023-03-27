@@ -53,7 +53,7 @@ function SupplierTables({ columns, data }) {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps() } key={i}>
                 {row.cells.map((cell) => {
                   if (
                     (cell.column.id === "isoDocument" ||
@@ -73,6 +73,7 @@ function SupplierTables({ columns, data }) {
                         </a>
                       </td>
                     );
+                    // MIGHT WANT TO LOOK INTO REACT QUERY BY ID TO REFRACTOR THIS
                   } else if (cell.column.id === "edit") {
                     return (
                       <td>

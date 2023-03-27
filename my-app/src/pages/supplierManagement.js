@@ -1,12 +1,9 @@
 // import react table here
 
-import { useQuery, useQueries } from "react-query";
 import SupplierTables from "./tables/supplierTables";
 import React from "react";
 import SupplierForm from "./forms/supplierForm";
-
-const supplierUrl =
-  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
+import { useDocumentQueries, useSupplierData } from "./hooks/useSuppliersData";
 
 function SupplierManagement() {
   const columns = React.useMemo(
@@ -51,39 +48,18 @@ function SupplierManagement() {
     ],
     []
   );
+  // fetch suplier data  (working fine )
   const {
     isLoading: supplierLoading,
     error: supplierError,
     data: supplierData,
-  } = useQuery(
-    "supplierData",
-    () => fetch(supplierUrl).then((res) => res.json()),
-  );
+  } = useSupplierData()
 
-  // do multiple usequery to each item in the supplier data based on its supplier id 
-  const documentQueries = useQueries(
-    supplierData?.map((supplier) => ({
-      queryKey: ["documentsData", supplier.id],
-      queryFn: () =>
-        fetch(
-          `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplier.id}/upload-document/`
-        ).then((res) => {
-          if (!res.ok) {
-            return {
-              supplier: supplier.id,
-              isoDocument: null,
-              gmpDocument: null,
-              haccpDocument: null,
-            };
-          }
-          return res.json();
-        }),
-    })) || []
-  );
-  
+  // do multiple usequery to each item in the supplier data based on its supplier id
+  const documentQueries = useDocumentQueries(supplierData)
 
   // map the document data with the correct supplier data
-  const suppliersWithDocumentData = supplierData?.map((supplier) => {
+  const suppliersWithDocumentData = supplierData?.data.map((supplier) => {
     try {
       const documents = documentQueries.find(
         (query) => query.data.supplier === supplier.id
@@ -97,14 +73,17 @@ function SupplierManagement() {
         edit: supplier.id,
       };
     } catch (error) {
-      console.log("refetching");
+      // error is expected 
     }
   });
 
-  if (supplierLoading || documentQueries.some((query) => query.isLoading))
+  if (
+    supplierLoading ||
+    documentQueries.some((query) => query.isLoading) 
+  )
     return "Loading...";
 
-  if (supplierError) return "An error has occurred: " + supplierError.message;
+  if (supplierError|| documentQueries.some((query) => query.isError)) return "An error has occurred: " + supplierError.message;
 
   return (
     <div>

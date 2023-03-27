@@ -11,6 +11,9 @@ import Profile from './pages/profile';
 import SupplierManagement from './pages/supplierManagement';
 import EditSupplier from './pages/editSupplier';
 
+import {ReactQueryDevtools} from 'react-query/devtools'
+
+
 
 const queryClient = new QueryClient()
 
@@ -33,6 +36,7 @@ function App() {
           <Route path='/supplier-management/edit/:supplierId'element={<EditSupplier/>} />
         </Route>
       </Routes>
+      <ReactQueryDevtools initialIsOpem={false} position="bottom-right" />
     </QueryClientProvider>
    
   );

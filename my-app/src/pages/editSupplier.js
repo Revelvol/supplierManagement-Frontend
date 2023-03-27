@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 
 function EditSupplier() {
+    // implement query by id here 
     const { supplierId} = useParams();
 
     return (

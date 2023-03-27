@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import supplierSchema from "../../validations/supplierValidation";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
-import { useAuthHeader } from "react-auth-kit";
-import { useMutation } from "react-query";
+import { useAuthHeader } from "react-auth-kit"; 
+import { useAddSupplierData } from "../hooks/useSuppliersData";
+
 const supplierUrl =
   "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
 
