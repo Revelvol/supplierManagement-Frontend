@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import supplierSchema from "../../validations/supplierValidation";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
 import { useAuthHeader } from "react-auth-kit";
-
+import { useMutation } from "react-query";
 const supplierUrl =
   "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
 
@@ -23,7 +23,6 @@ function SupplierForm() {
       gmpDocument: data.gmpDocument[0],
       haccpDocument: data.haccpDocument[0],
     };
-    console.log(supplierDocumentData);
     try {
       await supplierDocumentSchema.validate(supplierDocumentData);
 
@@ -48,17 +47,20 @@ function SupplierForm() {
         const supplierResponseData = await supplierResponse.json();
         const supplierId = supplierResponseData.id;
         const supplierDocumentUrl = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`;
-        console.log(supplierDocumentData);
-        var documents = new FormData();
-        if (data.isoDocument[0] !== "") {
+        const documents = new FormData();
+
+        if (data.isoDocument[0]) {
           documents.append("isoDocument", data.isoDocument[0]);
         }
-        if (data.haccpDocument[0] !== "") {
+
+        if ( data.haccpDocument[0]) {
           documents.append("haccpDocument", data.haccpDocument[0]);
         }
-        if (data.gmpDocument[0] !== "") {
+
+        if (data.gmpDocument[0]) {
           documents.append("gmpDocument", data.gmpDocument[0]);
         }
+
         const supplierDocumentResponse = await fetch(supplierDocumentUrl, {
           method: "POST",
           headers: {
@@ -66,11 +68,11 @@ function SupplierForm() {
           },
           body: documents,
         });
-        
-        if (!supplierDocumentResponse.ok){
-          setError("Something Wrong With The file Upload, please upload again")
-        }
 
+        console.log(await supplierDocumentResponse.json());
+        if (!supplierDocumentResponse.ok) {
+          setError("Something Wrong With The file Upload, please upload again");
+        }
       } else {
         setError(
           "Something When wrong with the supplier submision, please try Again"

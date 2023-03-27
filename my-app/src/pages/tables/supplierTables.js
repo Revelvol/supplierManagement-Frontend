@@ -1,6 +1,7 @@
 import { useTable, useSortBy } from "react-table";
 import styled from "styled-components";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaEdit } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -70,6 +71,14 @@ function SupplierTables({ columns, data }) {
                         >
                           <FaFilePdf />
                         </a>
+                      </td>
+                    );
+                  } else if (cell.column.id === "edit") {
+                    return (
+                      <td>
+                        <Link to={`/supplier-management/edit/${cell.value}`}>
+                          <FaEdit />
+                        </Link>
                       </td>
                     );
                   } else {

@@ -1,4 +1,5 @@
 // import react table here
+
 import { useQuery, useQueries } from "react-query";
 import SupplierTables from "./tables/supplierTables";
 import React from "react";
@@ -43,6 +44,10 @@ function SupplierManagement() {
           },
         ],
       },
+      {
+        Header: "edit",
+        accessor: "edit",
+      },
     ],
     []
   );
@@ -50,10 +55,12 @@ function SupplierManagement() {
     isLoading: supplierLoading,
     error: supplierError,
     data: supplierData,
-  } = useQuery("supplierData", () =>
-    fetch(supplierUrl).then((res) => res.json())
+  } = useQuery(
+    "supplierData",
+    () => fetch(supplierUrl).then((res) => res.json()),
   );
 
+  // do multiple usequery to each item in the supplier data based on its supplier id 
   const documentQueries = useQueries(
     supplierData?.map((supplier) => ({
       queryKey: ["documentsData", supplier.id],
@@ -73,8 +80,7 @@ function SupplierManagement() {
         }),
     })) || []
   );
-
-
+  
 
   // map the document data with the correct supplier data
   const suppliersWithDocumentData = supplierData?.map((supplier) => {
@@ -88,10 +94,12 @@ function SupplierManagement() {
         isoDocument: documents?.isoDocument || null,
         gmpDocument: documents?.gmpDocument || null,
         haccpDocument: documents?.haccpDocument || null,
+        edit: supplier.id,
       };
-    } catch (error) {}
+    } catch (error) {
+      console.log("refetching");
+    }
   });
-
 
   if (supplierLoading || documentQueries.some((query) => query.isLoading))
     return "Loading...";
@@ -102,7 +110,7 @@ function SupplierManagement() {
     <div>
       supplier Management
       <br></br>
-      <SupplierForm/>
+      <SupplierForm />
       <SupplierTables columns={columns} data={suppliersWithDocumentData} />
     </div>
   );

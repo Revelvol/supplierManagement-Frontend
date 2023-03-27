@@ -9,6 +9,7 @@ import ProtectedRoutes from './pages/protectedRoutes';
 import Register from './pages/register';
 import Profile from './pages/profile';
 import SupplierManagement from './pages/supplierManagement';
+import EditSupplier from './pages/editSupplier';
 
 
 const queryClient = new QueryClient()
@@ -29,6 +30,7 @@ function App() {
           <Route path='/' element={<Home />}/>
           <Route path='/profile' element={<Profile/>}/>
           <Route path='/supplier-management' element={<SupplierManagement/>}/>
+          <Route path='/supplier-management/edit/:supplierId'element={<EditSupplier/>} />
         </Route>
       </Routes>
     </QueryClientProvider>
