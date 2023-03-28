@@ -31,6 +31,9 @@ const Styles = styled.div`
     }
   }
 `;
+/* 
+MIGHT ALSO LOOK INTO PAGINATED QUERIES FOR PAGE, tapi kayaknya mesti configure di backend juga
+ASLO USE THE KEEP PREVIOUS DATA TO TRUE BIAR GA LOADING TERUS */
 function SupplierTables({ columns, data }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({

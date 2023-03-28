@@ -2,37 +2,17 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import supplierSchema from "../../validations/supplierValidation";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
-import { useAuthHeader } from "react-auth-kit";
-import { 
-  useAddSupplier,
-  useAddSupplierDocument,
-} from "../hooks/useSuppliersData";
+import { useAuthHeader } from "react-auth-kit"; 
+import { useAddSupplierData } from "../hooks/useSuppliersData";
 
-/* Ada bug dimana jika user add dokumen twice di satu form dia ke refresh sendiri, mungkin gara gara server backedn  */
+const supplierUrl =
+  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
 
 function SupplierForm() {
   const [page, setPage] = useState(1);
   const [error, setError] = useState("");
   const { register, handleSubmit, reset } = useForm();
-
   const token = useAuthHeader();
-  const {
-    mutate: addSupplier,
-    data: supplierData,
-    isLoading: addSupplierIsLoading,
-    isSuccess: addSupplierIsSuccess,
-    isError: addSupplierIsError,
-    error: addSupplierError,
-  } = useAddSupplier();
-
-  const {
-    mutate: addSupplierDocument,
-    data: supplierDocumentData,
-    isSuccess: addSupplierDocumentIsSuccess,
-    isLoading: addSupplierDocumentIsLoading,
-    isError: addSupplierDocumentIsError,
-    error: addSupplierDocumentError,
-  } = useAddSupplierDocument();
 
   useEffect(() => {
     window.scrollTo(0, 0); // scroll to top of page on page change
@@ -48,32 +28,59 @@ function SupplierForm() {
       await supplierDocumentSchema.validate(supplierDocumentData);
 
       // post the suplier data
-      const supplierPayload = {
+      const supplierData = {
         name: data.name,
         phone: data.phone,
         location: data.location,
       };
 
-      // if validation sucessfull add suplier
-      addSupplier(
-        { supplier: supplierPayload, token: token() },
-        {
-          onSuccess: (res) => {
-            // jika ada value d isuplier document add maka add dokumen
-            if (
-              supplierDocumentData.isoDocument ||
-              supplierDocumentData.gmpDocument ||
-              supplierDocumentData.haccpDocument
-            ) {
-              addSupplierDocument({
-                supplier: res.id,
-                documents: supplierDocumentData,
-                token: token(),
-              });
-            }
-          },
+      const supplierResponse = await fetch(supplierUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token(),
+        },
+        body: JSON.stringify(supplierData),
+      });
+
+      if (supplierResponse.ok) {
+        // if response is good post the suplier document with the supplier id
+        const supplierResponseData = await supplierResponse.json();
+        const supplierId = supplierResponseData.id;
+        const supplierDocumentUrl = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`;
+        const documents = new FormData();
+
+        if (data.isoDocument[0]) {
+          documents.append("isoDocument", data.isoDocument[0]);
         }
-      );
+
+        if ( data.haccpDocument[0]) {
+          documents.append("haccpDocument", data.haccpDocument[0]);
+        }
+
+        if (data.gmpDocument[0]) {
+          documents.append("gmpDocument", data.gmpDocument[0]);
+        }
+
+        const supplierDocumentResponse = await fetch(supplierDocumentUrl, {
+          method: "POST",
+          headers: {
+            Authorization: token(),
+          },
+          body: documents,
+        });
+
+        console.log(await supplierDocumentResponse.json());
+        if (!supplierDocumentResponse.ok) {
+          setError("Something Wrong With The file Upload, please upload again");
+        }
+      } else {
+        setError(
+          "Something When wrong with the supplier submision, please try Again"
+        );
+      }
+      // if response is not good set error
+
       setPage(1);
       setError("");
       reset({});
@@ -81,10 +88,6 @@ function SupplierForm() {
       setError(error.errors);
     }
   };
-
-  if (addSupplierIsLoading || addSupplierDocumentIsLoading) {
-    return "Loading .......";
-  }
 
   const nextPage = () => {
     setPage(page + 1);

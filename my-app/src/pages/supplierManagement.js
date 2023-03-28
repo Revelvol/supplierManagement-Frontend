@@ -3,7 +3,7 @@
 import SupplierTables from "./tables/supplierTables";
 import React from "react";
 import SupplierForm from "./forms/supplierForm";
-import { useDocumentQueries, useSupplierData } from "./hooks/useSuppliersData";
+import { useDocumentQueries, useSuppliersData } from "./hooks/useSuppliersData";
 
 function SupplierManagement() {
   const columns = React.useMemo(
@@ -53,7 +53,7 @@ function SupplierManagement() {
     isLoading: supplierLoading,
     error: supplierError,
     data: supplierData,
-  } = useSupplierData()
+  } = useSuppliersData()
 
   // do multiple usequery to each item in the supplier data based on its supplier id
   const documentQueries = useDocumentQueries(supplierData)
