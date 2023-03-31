@@ -9,6 +9,13 @@ const fetchSupplierData = ({ queryKey }) => {
   );
 };
 
+const fetchSupplierDocumentData = ({ queryKey }) => {
+  const supplierId = queryKey[1];
+  return axios.get(
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`
+  );
+};
+
 export const useSupplierData = (supplierId) => {
   /*  because the data is already fetch in the main,
    it is better to just do background fetch and serve already existed data */
@@ -28,4 +35,27 @@ export const useSupplierData = (supplierId) => {
       }
     },
   });
+};
+
+export const useSupplierDocumentData = (supplierId) => {
+  /* same as above get the dcument data from the cache, 
+  or when it is not avairble */
+  const queryClient = useQueryClient();
+
+  return useQuery(["documentData", supplierId], fetchSupplierDocumentData,
+    {
+      initialData: () => {
+        const document = queryClient.getQueryData(["documentData", supplierId])?.data.find()
+        if (document) {
+          return {
+            data: document,
+          };
+        } else {
+          return undefined;
+        }
+      }
+      
+    }
+  
+  );
 };

@@ -1,30 +1,44 @@
-import { useSupplierData } from "../query/useSupplierData";
+import { useSupplierData, useSupplierDocumentData } from "../query/useSupplierData";
 import { useForm } from "react-hook-form";
 import { useAuthHeader } from "react-auth-kit";
 
 function EditSupplierForm(props) {
   const token = useAuthHeader();
   const supplierId = props.supplierId;
-  const { data: supplier } = useSupplierData(supplierId);
+  const {
+    data: supplier,
+    isLoading: supplierIsLoading,
+    isError: supplierIsError,
+    error: supplierError,
+  } = useSupplierData(supplierId);
+  const {
+    data: document,
+    isLoading: documentIsLoading,
+    isError: documentIsError,
+    error: documentError,
+  } = useSupplierDocumentData(supplierId)
+  console.log(document)
 
-  console.log(supplier)
-
-  const onSubmit = (data) =>  console.log(supplier);
+  const onSubmit = (data) => console.log(supplier);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  if (supplierIsLoading) {
+    return "Is Loading... ";
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label> Name </label>
-      <input defaultValue={``} {...register("name")} />
+      <input value={`${supplier.data.name}`} {...register("name")} />
       <br></br>
       <label> Phone </label>
-      <input defaultValue="test" {...register("phone")} />
+      <input value={`${supplier.data.phone}`} {...register("phone")} />
       <br></br>
       <label> Phone </label>
-      <input defaultValue="test" {...register("location")} />
+      <input value={`${supplier.data.location}`} {...register("location")} />
       <br></br>
 
       <label htmlFor="isoDocument">isoDocument</label>
