@@ -2,8 +2,8 @@
 
 import SupplierTables from "./tables/supplierTables";
 import React from "react";
-import SupplierForm from "./forms/supplierForm";
-import { useDocumentQueries, useSuppliersData } from "./hooks/useSuppliersData";
+import AddSupplierForm from "./forms/addSupplierForm";
+import { useDocumentQueries, useSuppliersData } from "./query/useSuppliersData";
 
 function SupplierManagement() {
   const columns = React.useMemo(
@@ -89,7 +89,7 @@ function SupplierManagement() {
     <div>
       supplier Management
       <br></br>
-      <SupplierForm />
+      <AddSupplierForm />
       <SupplierTables columns={columns} data={suppliersWithDocumentData} />
     </div>
   );

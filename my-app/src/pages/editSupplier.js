@@ -1,17 +1,16 @@
-import { useParams } from "react-router-dom"
-import { useSupplierData } from "./hooks/useSupplierData";
-
+import { useParams } from "react-router-dom";
+import EditSupplierForm from "./forms/editSupplierForm";
 
 function EditSupplier() {
-    // implement query by id here 
-    const { supplierId } = useParams();
+  // implement query by id here
+  const { supplierId } = useParams();
 
-    const { data } = useSupplierData(supplierId); 
-    
-
-    return (
-        <h1> Test {supplierId} </h1>
-    )
+  return (
+    <div>
+        <h1> edit supplier </h1>
+      <EditSupplierForm supplierId={supplierId} />
+    </div>
+  );
 }
 
-export default EditSupplier
+export default EditSupplier;

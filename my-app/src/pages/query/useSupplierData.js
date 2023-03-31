@@ -21,7 +21,7 @@ export const useSupplierData = (supplierId) => {
 
       if (supplier) {
         return {
-          data: supplier
+          data: supplier,
         };
       } else {
         return undefined;
