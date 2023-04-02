@@ -7,13 +7,23 @@ import { useAuthHeader } from "react-auth-kit";
 import { FaFilePdf } from "react-icons/fa";
 import { useState } from "react";
 import supplierSchema from "../../validations/supplierValidation";
+import { usePutSupplierData } from "../query/useSupplierData";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
 
 function EditSupplierForm(props) {
   const [showIso, setShowIso] = useState(false);
   const [showGmp, setShowGmp] = useState(false);
   const [showHaccp, setShowHaccp] = useState(false);
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
+  const token = useAuthHeader();
+  const supplierId = props.supplierId;
+  const {
+    mutate: editSupplier,
+    data: updatedSupplierData,
+    isLoading: editSupplierIsLoading,
+    isError: editSupplierIsError,
+    error: editSupplierError,
+  } = usePutSupplierData(supplierId);
 
   const handleGmpChange = () => {
     setShowGmp(true);
@@ -26,8 +36,6 @@ function EditSupplierForm(props) {
     setShowHaccp(true);
   };
 
-  const token = useAuthHeader();
-  const supplierId = props.supplierId;
   const {
     data: supplier,
     isLoading: supplierIsLoading,
@@ -41,23 +49,24 @@ function EditSupplierForm(props) {
     error: documentError,
   } = useSupplierDocumentData(supplierId);
 
-
   const onSubmit = async (data) => {
     const supplierPayload = {
       name: data.name,
       phone: data.phone,
       location: data.location,
-    }
-    // validate the supplierPayload 
+    };
+    // validate the supplierPayload
     try {
-     await supplierSchema.validate(supplierPayload)
-    //  if the supplier schema is validated, patch the data into the new one 
-     
+      await supplierSchema.validate(supplierPayload);
+      //  if the supplier schema is validated, patch the data into the new one
+      editSupplier({
+        token: token(),
+        supplierId: supplierId, 
+        payload: supplierPayload
+      })
     } catch (validationError) {
-      setError(validationError.errors)
+      setError(validationError.errors);
     }
-
-
   };
   const {
     register,
@@ -66,7 +75,7 @@ function EditSupplierForm(props) {
   } = useForm();
 
   // docment will loading because of the api issue
-  if (supplierIsLoading || documentIsLoading) {
+  if (supplierIsLoading || documentIsLoading || editSupplierIsLoading) {
     return "Is Loading... ";
   }
   if (supplierIsError) {
@@ -76,17 +85,17 @@ function EditSupplierForm(props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       {error !== "" && <div className="alert alert-danger">{error}</div>}
       <label> Name </label>
-      <input value={`${supplier.data.name}`} {...register("name")} />
+      <input defaultValue={`${supplier.data.name}`} {...register("name")} />
       <br></br>
       <label> Phone </label>
-      <input value={`${supplier.data.phone}`} {...register("phone")} />
+      <input defaultValue={`${supplier.data.phone}`} {...register("phone")} />
       <br></br>
       <label> Phone </label>
-      <input value={`${supplier.data.location}`} {...register("location")} />
+      <input defaultValue={`${supplier.data.location}`} {...register("location")} />
       <br></br>
 
       <label htmlFor="isoDocument">isoDocument</label>
-      { document && document.data.isoDocument ? (
+      {document && document.data.isoDocument ? (
         <>
           <a
             href={document.data.isoDocument}
@@ -114,7 +123,7 @@ function EditSupplierForm(props) {
 
       <br></br>
       <label htmlFor="gmpDocument">gmpDocument</label>
-      { document && document.data.gmpDocument ? (
+      {document && document.data.gmpDocument ? (
         <>
           <a
             href={document.data.gmpDocument}
@@ -142,7 +151,7 @@ function EditSupplierForm(props) {
 
       <br></br>
       <label htmlFor="haccpDocument">haccpDocument</label>
-      { document && document.data.haccpDocument   ? (
+      {document && document.data.haccpDocument ? (
         <>
           <a
             href={document.data.haccpDocument}
@@ -151,7 +160,11 @@ function EditSupplierForm(props) {
           >
             <FaFilePdf />
           </a>
-          {!showHaccp ? <button onClick={handleHaccpChange}> Edit </button> : ""}
+          {!showHaccp ? (
+            <button onClick={handleHaccpChange}> Edit </button>
+          ) : (
+            ""
+          )}
           <div style={{ display: showHaccp ? "block" : "none" }}>
             <input
               type="file"

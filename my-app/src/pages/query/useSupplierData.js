@@ -1,5 +1,5 @@
 //  use the usequery hook to fetch the individual data of the usequery
-import { useQueryClient, useQuery, useMutation  } from "react-query";
+import { useQueryClient, useQuery, useMutation } from "react-query";
 import axios from "axios";
 
 const fetchSupplierData = ({ queryKey }) => {
@@ -17,12 +17,17 @@ const fetchSupplierDocumentData = ({ queryKey }) => {
 };
 
 const putSupplierData = (data) => {
-  const supplierId = data.supplierId
-  const token = data.token 
+  const supplierId = data.supplierId;
   return axios.put(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`
-  )
-}
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`,
+    data.payload,
+    {
+      headers: {
+        Authorization: data.token,
+      },
+    }
+  );
+};
 
 export const useSupplierData = (supplierId) => {
   /*  because the data is already fetch in the main,
@@ -46,37 +51,32 @@ export const useSupplierData = (supplierId) => {
 };
 
 export const usePutSupplierData = (supplierId) => {
-  console.log(supplierId)
   const queryClient = useQueryClient();
- return useMutation(putSupplierData,{
-  onSuccess: () => {
-    queryClient.invalidateQueries("suppliersData")
-    queryClient.invalidateQueries(["supplierData", supplierId])
-  }
- })
-}
+  return useMutation(putSupplierData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("suppliersData");
+      queryClient.invalidateQueries(["supplierData", supplierId]);
+    },
+  });
+};
 
 export const useSupplierDocumentData = (supplierId) => {
   /* same as above get the dcument data from the cache, 
   or when it is not avairble */
   const queryClient = useQueryClient();
 
-  return useQuery(["documentData", supplierId], fetchSupplierDocumentData,
-    {
-      initialData: () => {
-        const document = queryClient.getQueryData(["documentData", supplierId])?.data.find()
-        if (document) {
-          return {
-            data: document,
-          };
-        } else {
-          return undefined;
-        }
+  return useQuery(["documentData", supplierId], fetchSupplierDocumentData, {
+    initialData: () => {
+      const document = queryClient
+        .getQueryData(["documentData", supplierId])
+        ?.data.find();
+      if (document) {
+        return {
+          data: document,
+        };
+      } else {
+        return undefined;
       }
-      
-    }
-  
-  );
+    },
+  });
 };
-
-
