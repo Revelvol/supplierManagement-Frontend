@@ -29,6 +29,19 @@ const putSupplierData = (data) => {
   );
 };
 
+const patchDocumentData = (data) => {
+  const supplierId = data.supplierId;
+  return axios.patch(
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`,
+    data.payload,
+    {
+      headers: {
+        Authorization: data.token,
+      },
+    }
+  );
+};
+
 export const useSupplierData = (supplierId) => {
   /*  because the data is already fetch in the main,
    it is better to just do background fetch and serve already existed data */
@@ -56,6 +69,15 @@ export const usePutSupplierData = (supplierId) => {
     onSuccess: () => {
       queryClient.invalidateQueries("suppliersData");
       queryClient.invalidateQueries(["supplierData", supplierId]);
+    },
+  });
+};
+
+export const usePatchSupplierDocumentData = (supplierId) => {
+  const queryClient = useQueryClient();
+  return useMutation(patchDocumentData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["documentData", supplierId]);
     },
   });
 };
