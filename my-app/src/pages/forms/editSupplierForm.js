@@ -61,9 +61,26 @@ function EditSupplierForm(props) {
       //  if the supplier schema is validated, patch the data into the new one
       editSupplier({
         token: token(),
-        supplierId: supplierId, 
-        payload: supplierPayload
-      })
+        supplierId: supplierId,
+        payload: supplierPayload,
+      });
+      try {
+        // validate the document payload 
+        const documentPayload = {};
+        if (data.isoDocument && data.isoDocument[0]) {
+          documentPayload.isoDocument = data.isoDocument[0];
+        }
+        if (data.gmpDocument && data.gmpDocument[0]) {
+          documentPayload.gmpDocument = data.gmpDocument[0];
+        }
+        if (data.haccpDocument && data.haccpDocument[0]) {
+          documentPayload.haccpDocument = data.haccpDocument[0];
+        }
+        await supplierDocumentSchema.validate(documentPayload);
+
+      } catch (validationError) {
+        setError(validationError.errors);
+      }
     } catch (validationError) {
       setError(validationError.errors);
     }
@@ -91,7 +108,10 @@ function EditSupplierForm(props) {
       <input defaultValue={`${supplier.data.phone}`} {...register("phone")} />
       <br></br>
       <label> Phone </label>
-      <input defaultValue={`${supplier.data.location}`} {...register("location")} />
+      <input
+        defaultValue={`${supplier.data.location}`}
+        {...register("location")}
+      />
       <br></br>
 
       <label htmlFor="isoDocument">isoDocument</label>
