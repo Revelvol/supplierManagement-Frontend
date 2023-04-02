@@ -1,5 +1,5 @@
 //  use the usequery hook to fetch the individual data of the usequery
-import { useQueryClient, useQuery } from "react-query";
+import { useQueryClient, useQuery, useMutation  } from "react-query";
 import axios from "axios";
 
 const fetchSupplierData = ({ queryKey }) => {
@@ -15,6 +15,14 @@ const fetchSupplierDocumentData = ({ queryKey }) => {
     `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`
   );
 };
+
+const putSupplierData = (data) => {
+  const supplierId = data.supplierId
+  const token = data.token 
+  return axios.put(
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`
+  )
+}
 
 export const useSupplierData = (supplierId) => {
   /*  because the data is already fetch in the main,
@@ -36,6 +44,17 @@ export const useSupplierData = (supplierId) => {
     },
   });
 };
+
+export const usePutSupplierData = (supplierId) => {
+  console.log(supplierId)
+  const queryClient = useQueryClient();
+ return useMutation(putSupplierData,{
+  onSuccess: () => {
+    queryClient.invalidateQueries("suppliersData")
+    queryClient.invalidateQueries(["supplierData", supplierId])
+  }
+ })
+}
 
 export const useSupplierDocumentData = (supplierId) => {
   /* same as above get the dcument data from the cache, 
@@ -59,3 +78,5 @@ export const useSupplierDocumentData = (supplierId) => {
   
   );
 };
+
+
