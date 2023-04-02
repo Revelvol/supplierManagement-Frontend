@@ -18,20 +18,14 @@ function AddSupplierForm() {
   const token = useAuthHeader();
   const {
     mutate: addSupplier,
-    data: supplierData,
     isLoading: addSupplierIsLoading,
-    isSuccess: addSupplierIsSuccess,
-    isError: addSupplierIsError,
-    error: addSupplierError,
+
   } = useAddSupplier();
 
   const {
     mutate: addSupplierDocument,
-    data: supplierDocumentData,
-    isSuccess: addSupplierDocumentIsSuccess,
     isLoading: addSupplierDocumentIsLoading,
-    isError: addSupplierDocumentIsError,
-    error: addSupplierDocumentError,
+
   } = useAddSupplierDocument();
 
   useEffect(() => {

@@ -19,10 +19,8 @@ function EditSupplierForm(props) {
   const supplierId = props.supplierId;
   const {
     mutate: editSupplier,
-    data: updatedSupplierData,
+  
     isLoading: editSupplierIsLoading,
-    isError: editSupplierIsError,
-    error: editSupplierError,
   } = usePutSupplierData(supplierId);
 
   const {
@@ -105,7 +103,7 @@ function EditSupplierForm(props) {
   } = useForm();
 
   // docment will loading because of the api issue
-  if (supplierIsLoading || documentIsLoading || editSupplierIsLoading) {
+  if (supplierIsLoading || documentIsLoading || editSupplierIsLoading || editSupplierDocumentIsLoading) {
     return "Is Loading... ";
   }
   if (supplierIsError) {

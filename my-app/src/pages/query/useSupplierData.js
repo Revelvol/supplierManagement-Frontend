@@ -30,10 +30,24 @@ const putSupplierData = (data) => {
 };
 
 const patchDocumentData = (data) => {
+  const documents = new FormData();
+  if (data.payload.isoDocument) {
+    documents.append("isoDocument", data.payload.isoDocument);
+  }
+
+  if (data.payload.haccpDocument) {
+    documents.append("haccpDocument", data.payload.haccpDocument);
+  }
+
+  if (data.payload.gmpDocument) {
+    documents.append("gmpDocument", data.payload.gmpDocument);
+  }
+
   const supplierId = data.supplierId;
   return axios.patch(
     `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`,
-    data.payload,
+    documents,
+
     {
       headers: {
         Authorization: data.token,
