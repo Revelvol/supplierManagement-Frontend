@@ -7,7 +7,7 @@ import { useAuthHeader } from "react-auth-kit";
 import { FaFilePdf } from "react-icons/fa";
 import { useState } from "react";
 import supplierSchema from "../../validations/supplierValidation";
-import { usePutSupplierData } from "../query/useSupplierData";
+import { usePutSupplierData, usePatchSupplierDocumentData } from "../query/useSupplierData";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
 
 function EditSupplierForm(props) {
@@ -24,6 +24,14 @@ function EditSupplierForm(props) {
     isError: editSupplierIsError,
     error: editSupplierError,
   } = usePutSupplierData(supplierId);
+
+  const {
+    mutate: editSupplierDocument, 
+    data: editSupplierDocumentData,
+    isLoading: editSupplierDocumentIsLoading,
+    isError: editSupplierDocumentIsError,
+    error: editSupplierDocumentError, 
+  } = usePatchSupplierDocumentData(supplierId)
 
   const handleGmpChange = () => {
     setShowGmp(true);
@@ -77,6 +85,11 @@ function EditSupplierForm(props) {
           documentPayload.haccpDocument = data.haccpDocument[0];
         }
         await supplierDocumentSchema.validate(documentPayload);
+        editSupplierDocument({
+          token: token(),
+          supplierId: supplierId,
+          payload: documentPayload
+        })
 
       } catch (validationError) {
         setError(validationError.errors);
