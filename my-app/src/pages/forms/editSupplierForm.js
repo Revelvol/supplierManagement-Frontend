@@ -106,6 +106,7 @@ function EditSupplierForm(props) {
   if (supplierIsLoading || documentIsLoading || editSupplierIsLoading || editSupplierDocumentIsLoading) {
     return "Is Loading... ";
   }
+  // disini mungkin ada eror dr user dimana kalo dia ga staf ga bisa post 
   if (supplierIsError) {
     return `Something Went Wrong, please refresh the page ${supplierError}`;
   }
