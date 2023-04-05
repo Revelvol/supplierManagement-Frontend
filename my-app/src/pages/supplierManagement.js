@@ -1,11 +1,17 @@
 // import react table here
 
 import SupplierTables from "./tables/supplierTables";
+import { useState } from "react";
 import React from "react";
 import AddSupplierForm from "./forms/addSupplierForm";
 import { useDocumentQueries, useSuppliersData } from "./query/useSuppliersData";
 
 function SupplierManagement() {
+  const [hideAddSupplier, setHideAddSupplier] = useState(true)
+
+  const handleUnhideAddSupplier = () => {
+    setHideAddSupplier(!hideAddSupplier);
+  }
   const columns = React.useMemo(
     () => [
       // {
@@ -89,7 +95,12 @@ function SupplierManagement() {
     <div>
       supplier Management
       <br></br>
-      <AddSupplierForm />
+      {
+        hideAddSupplier=== true? <button onClick={handleUnhideAddSupplier}>Add Supplier </button>: ""} 
+      
+      {
+        hideAddSupplier === false ? <AddSupplierForm /> : ""
+      }
       <SupplierTables columns={columns} data={suppliersWithDocumentData} />
     </div>
   );
