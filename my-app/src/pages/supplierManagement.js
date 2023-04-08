@@ -54,7 +54,7 @@ function SupplierManagement() {
     ],
     []
   );
-  // fetch suplier data  (working fine )
+  
   const {
     isLoading: supplierLoading,
     error: supplierError,
