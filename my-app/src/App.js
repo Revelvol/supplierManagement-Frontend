@@ -12,7 +12,7 @@ import SupplierManagement from './pages/supplierManagement';
 import EditSupplier from './pages/editSupplier';
 
 import {ReactQueryDevtools} from 'react-query/devtools'
-import IngredientManagement from './pages/ingredientManagement';
+import IngredientManagement from './pages/ingredientsManagement';
 
 
 
