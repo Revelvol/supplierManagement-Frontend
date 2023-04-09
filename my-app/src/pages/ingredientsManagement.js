@@ -83,7 +83,7 @@ function IngredientManagement() {
       }
     });
     
-    setIngredientTable(<IngredientTables />);
+    setIngredientTable(<IngredientTables columns={columns} data={ingredientData} />);
   };
 
   return (
