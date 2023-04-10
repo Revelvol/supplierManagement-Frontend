@@ -67,10 +67,6 @@ function IngredientTables({ columns, data }) {
                 {headerGroup.headers.map((column) => (
                   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
-                    {/* column filter */}
-                    <div onClick={(e) => e.stopPropagation()}>
-                      {column.canFilter ? column.render("Filter") : null}
-                    </div>
                     {/* column sort */}
                     <span>
                       {column.isSorted
@@ -79,6 +75,10 @@ function IngredientTables({ columns, data }) {
                           : " 🔼"
                         : ""}
                     </span>
+                    {/* column filter */}
+                    <div onClick={(e) => e.stopPropagation()}>
+                      {column.canFilter ? column.render("Filter") : null}
+                    </div>
                   </th>
                 ))}
               </tr>

@@ -7,6 +7,7 @@ import { ColumnFilter } from "./tables/columnFilter";
 function IngredientManagement() {
   const [errorMessage, setErrorMessage] = useState("");
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
+  
 
   const columns = useMemo(
     () => [
@@ -28,13 +29,13 @@ function IngredientManagement() {
       {
         Header: "Unit",
         accessor: "unit",
-        Cell: ({ value }) => <span>{value.abbreviation}</span>,
+        Cell: ({ value }) => {return value.abbreviation},
         Filter: ColumnFilter,
       },
       {
         Header: "Function",
         accessor: "function",
-        Cell: ({ value }) => <span>{value.name}</span>,
+        Cell: ({ value }) => {return value.name},
         Filter: ColumnFilter,
       },
       {
@@ -51,6 +52,7 @@ function IngredientManagement() {
             </div>
           ),
         Filter: ColumnFilter,
+        disableFilters : true
       },
     ],
     []
