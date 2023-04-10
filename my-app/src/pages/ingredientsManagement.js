@@ -32,16 +32,28 @@ function IngredientManagement() {
       {
         Header: "Unit",
         accessor: "unit",
+        Cell: ({ value }) => <span>{value.abbreviation}</span>,
       },
       {
         Header: "Function",
         accessor: "function",
+        Cell: ({ value }) => <span>{value.name}</span>
       },
       {
         Header: "Is Used",
         accessor: "is_used",
+        Cell: ({ value }) =>
+        value ? (
+          <div className="d-flex align-items-center justify-content-center h-100 bg-success">
+            <span className="text-center text-white">Used</span>
+          </div>
+        ) : (
+          <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
+            <span className="text-center text-white">Not Used</span>
+          </div>
+        ),
       },
-    ],
+    ], 
     []
   );
 
@@ -82,8 +94,15 @@ function IngredientManagement() {
         return null;
       }
     });
-    
-    setIngredientTable(<IngredientTables columns={columns} data={ingredientData} />);
+    console.log(ingredientData[0] === null);
+    // if null render nothing
+    if (ingredientData[0] === null) {
+      setIngredientTable("There is no ingredient, add ingredient!!!");
+    } else {
+      setIngredientTable(
+        <IngredientTables columns={columns} data={ingredientData} />
+      );
+    }
   };
 
   return (
@@ -104,7 +123,7 @@ function IngredientManagement() {
           );
         })}
       </ul>
-      <div myClass="ingredientTable">{ingredientTable}</div>
+      <div className="ingredientTable">{ingredientTable}</div>
     </div>
   );
 }
