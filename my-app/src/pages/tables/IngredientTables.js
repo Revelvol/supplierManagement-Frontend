@@ -40,18 +40,21 @@ function IngredientTables({ columns, data }) {
       columns: columns,
       data: ingredientData,
     },
+    useGlobalFilter,
     useSortBy,
+  
  
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter } =
     tableInstance;
 
 
   // pop the function and unit data karena itu another object within object
   return (
-    <Styles>
-      <>
+      <div>
+        <GlobalFilter filter={state.globalFilter} setFilter={setGlobalFilter} />
+        <Styles>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -87,8 +90,9 @@ function IngredientTables({ columns, data }) {
           })}
         </tbody>
       </table>
-      </>
-    </Styles>
+      </Styles>
+      </div>
+    
   );
 }
 

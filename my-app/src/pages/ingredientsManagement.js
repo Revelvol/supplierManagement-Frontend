@@ -49,7 +49,7 @@ function IngredientManagement() {
           </div>
         ) : (
           <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
-            <span className="text-center text-white">Not Used</span>
+            <span className="text-center text-white">Not Used </span>
           </div>
         ),
       },
