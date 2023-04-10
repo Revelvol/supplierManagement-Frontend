@@ -89,6 +89,10 @@ function IngredientTables({ columns, data }) {
     selectedFlatRows,
   } = tableInstance;
 
+  /*selected rows are selected in the selectedFlatRows, might want  to json stringtify first)
+  di original nya 
+  */
+
   const { pageIndex, globalFilter, pageSize } = state;
   // pop the function and unit data karena itu another object within object
   return (
