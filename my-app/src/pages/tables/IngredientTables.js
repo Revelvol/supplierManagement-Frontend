@@ -51,6 +51,23 @@ function IngredientTables({ columns, data }) {
     useGlobalFilter,
     useSortBy,
     usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        {
+          id: "selection",
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <Checkbox {...getToggleAllRowsSelectedProps()} />
+          ),
+          Cell: ({ row }) => (
+            <div>
+              <Checkbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ]);
+    }
   );
 
   const {
