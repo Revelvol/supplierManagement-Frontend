@@ -1,8 +1,7 @@
-import { useTable, useSortBy, useGlobalFilter } from "react-table";
+import { useTable, useSortBy, useGlobalFilter, useFilters } from "react-table";
 import styled from "styled-components";
 import { useMemo } from "react";
 import { GlobalFilter } from "./globalFilter";
-
 
 const Styles = styled.div`
   padding: 1rem;
@@ -40,59 +39,68 @@ function IngredientTables({ columns, data }) {
       columns: columns,
       data: ingredientData,
     },
+    useFilters,
     useGlobalFilter,
-    useSortBy,
-  
- 
+    useSortBy
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter } =
-    tableInstance;
-
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = tableInstance;
 
   // pop the function and unit data karena itu another object within object
   return (
-      <div>
-        <GlobalFilter filter={state.globalFilter} setFilter={setGlobalFilter} />
-        <Styles>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {" "}
-                  {column.render("Header")}{" "}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
-                      : ""}
-                  </span>{" "}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}> {cell.render("Cell")} </td>
-                  );
-                })}
+    <div>
+      {/* global filter */}
+      <GlobalFilter filter={state.globalFilter} setFilter={setGlobalFilter} />
+      <Styles>
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render("Header")}
+                    {/* column filter */}
+                    <div onClick={(e) => e.stopPropagation()}>
+                      {column.canFilter ? column.render("Filter") : null}
+                    </div>
+                    {/* column sort */}
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? " 🔽"
+                          : " 🔼"
+                        : ""}
+                    </span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}> {cell.render("Cell")} </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </Styles>
-      </div>
-    
+    </div>
   );
 }
 

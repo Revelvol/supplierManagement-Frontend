@@ -6,6 +6,7 @@ import React from "react";
 import AddSupplierForm from "./forms/addSupplierForm";
 import { useDocumentQueries, useSuppliersData } from "./query/useSuppliersData";
 
+
 function SupplierManagement() {
   const [hideAddSupplier, setHideAddSupplier] = useState(true)
 
@@ -21,6 +22,7 @@ function SupplierManagement() {
       {
         Header: "Name",
         accessor: "name", // accessor is the "key" in the data
+      
       },
       {
         Header: "Location",

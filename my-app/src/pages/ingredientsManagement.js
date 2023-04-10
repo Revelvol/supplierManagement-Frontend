@@ -1,15 +1,8 @@
-// get supplier data
-// display supplier as clickable buttuon
-// get ingredients data based on the supplier ID
-// display the ingredients data based on those supplier
-
-// edit the ingredients of the displayed data,
-// add ingredient promtp to the displayed supplier
-// add supplier also can be shown here
 import { useSuppliersData } from "./query/useSuppliersData";
 import { useGetIngredientsData } from "./query/useIngredientsData";
 import { useState, useMemo } from "react";
 import IngredientTables from "./tables/IngredientTables";
+import { ColumnFilter } from "./tables/columnFilter";
 
 function IngredientManagement() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,40 +13,46 @@ function IngredientManagement() {
       {
         Header: "Ingredient Name",
         accessor: "name",
+        Filter: ColumnFilter,
       },
       {
         Header: "Price ($)",
         accessor: "price",
+        Filter: ColumnFilter,
       },
       {
         Header: "Quantity",
         accessor: "quantity",
+        Filter: ColumnFilter,
       },
       {
         Header: "Unit",
         accessor: "unit",
         Cell: ({ value }) => <span>{value.abbreviation}</span>,
+        Filter: ColumnFilter,
       },
       {
         Header: "Function",
         accessor: "function",
-        Cell: ({ value }) => <span>{value.name}</span>
+        Cell: ({ value }) => <span>{value.name}</span>,
+        Filter: ColumnFilter,
       },
       {
         Header: "Is Used",
         accessor: "is_used",
         Cell: ({ value }) =>
-        value ? (
-          <div className="d-flex align-items-center justify-content-center h-100 bg-success">
-            <span className="text-center text-white">Used</span>
-          </div>
-        ) : (
-          <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
-            <span className="text-center text-white">Not Used </span>
-          </div>
-        ),
+          value ? (
+            <div className="d-flex align-items-center justify-content-center h-100 bg-success">
+              <span className="text-center text-white">Used</span>
+            </div>
+          ) : (
+            <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
+              <span className="text-center text-white">Not Used </span>
+            </div>
+          ),
+        Filter: ColumnFilter,
       },
-    ], 
+    ],
     []
   );
 
@@ -94,7 +93,6 @@ function IngredientManagement() {
         return null;
       }
     });
-    console.log(ingredientData[0] === null);
     // if null render nothing
     if (ingredientData[0] === null) {
       setIngredientTable("There is no ingredient, add ingredient!!!");
