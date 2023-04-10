@@ -2,13 +2,13 @@ import { useSuppliersData } from "./query/useSuppliersData";
 import { useGetIngredientsData } from "./query/useIngredientsData";
 import { useState, useMemo } from "react";
 import IngredientTables from "./tables/IngredientTables";
-import { ColumnFilter } from "./tables/columnFilter";
+import { ColumnFilter } from "./tables/Filter/columnFilter";
 
 function IngredientManagement() {
   const [errorMessage, setErrorMessage] = useState("");
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
   
-
+  // ada bug di filtering yang object dan is used 
   const columns = useMemo(
     () => [
       {

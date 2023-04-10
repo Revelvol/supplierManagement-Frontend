@@ -1,7 +1,15 @@
-import { useTable, useSortBy, useGlobalFilter, useFilters } from "react-table";
+import {
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  useFilters,
+  usePagination,
+  useRowSelect,
+} from "react-table";
 import styled from "styled-components";
 import { useMemo } from "react";
-import { GlobalFilter } from "./globalFilter";
+import { GlobalFilter } from "./Filter/globalFilter";
+import { Checkbox } from "./checkbox/checkbox";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -41,24 +49,35 @@ function IngredientTables({ columns, data }) {
     },
     useFilters,
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    usePagination,
   );
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPrevousPage,
     prepareRow,
+    pageOptions,
+    gotoPage,
+    pageCount,
+    setPageSize,
     state,
     setGlobalFilter,
+    selectedFlatRows,
   } = tableInstance;
 
+  const { pageIndex, globalFilter, pageSize } = state;
   // pop the function and unit data karena itu another object within object
   return (
     <div>
       {/* global filter */}
-      <GlobalFilter filter={state.globalFilter} setFilter={setGlobalFilter} />
+      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <Styles>
         <table {...getTableProps()}>
           <thead>
@@ -85,7 +104,7 @@ function IngredientTables({ columns, data }) {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {page.map((row) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
@@ -99,6 +118,58 @@ function IngredientTables({ columns, data }) {
             })}
           </tbody>
         </table>
+        <div>
+          {/* allow user to goto certain page */}
+          <span>
+            Page{" "}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{" "}
+          </span>
+          <span>
+            | Go to page :{" "}
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const pageNumber = e.target.value
+                  ? Number(e.target.value) - 1
+                  : 0;
+                gotoPage(pageNumber);
+              }}
+              style={{ width: "50px" }}
+            />
+          </span>
+          {/* Allow user to set page size  */}
+          <select
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+          >
+            {[10, 25, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+          {/* allow user to navigate page  */}
+          <button onClick={() => gotoPage(0)} disabled={!canPrevousPage}>
+            {"<<"}{" "}
+          </button>
+          <button onClick={() => previousPage()} disabled={!canPrevousPage}>
+            {" "}
+            Previous{" "}
+          </button>
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            {" "}
+            Next{" "}
+          </button>
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {">>"}{" "}
+          </button>
+        </div>
       </Styles>
     </div>
   );
