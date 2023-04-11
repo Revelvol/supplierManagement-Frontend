@@ -30,12 +30,22 @@ function IngredientManagement() {
         accessor: "unit",
         Cell: ({ value }) => {return value.abbreviation},
         Filter: ColumnFilter,
+        filter: (row,columnIds, filterValue) => {
+          return row.filter(row => 
+            row.values.unit.abbreviation.includes(filterValue)
+          )
+        }
       },
       {
         Header: "Function",
         accessor: "function",
         Cell: ({ value }) => {return value.name},
         Filter: ColumnFilter,
+        filter: (row,columnIds, filterValue) => {
+          return row.filter(row => 
+            row.values.function.name.includes(filterValue)
+          )
+        }
       },
       {
         Header: "Is Used",
