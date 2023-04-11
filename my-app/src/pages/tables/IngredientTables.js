@@ -52,6 +52,7 @@ function IngredientTables({ columns, data }) {
     useSortBy,
     usePagination,
     useRowSelect,
+    // row selection function
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
         {
@@ -105,18 +106,18 @@ function IngredientTables({ columns, data }) {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render("Header")}
-                    {/* column sort */}
-                    <span>
+                  <th {...column.getHeaderProps()}>
+                    {/* column sort  */}
+                   <span {...column.getSortByToggleProps()}>
+                      {column.render('Header')}
                       {column.isSorted
                         ? column.isSortedDesc
-                          ? " 🔽"
-                          : " 🔼"
-                        : ""}
+                          ? ' 🔽'
+                          : ' 🔼'
+                        : ''}
                     </span>
                     {/* column filter */}
-                    <div onClick={(e) => e.stopPropagation()}>
+                    <div >
                       {column.canFilter ? column.render("Filter") : null}
                     </div>
                   </th>

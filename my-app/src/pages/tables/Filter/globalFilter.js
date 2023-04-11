@@ -1,24 +1,23 @@
 import { useAsyncDebounce } from "react-table";
 import { useState } from "react";
 
+//  might wanna look into set aysnc debounce 
+
 export const GlobalFilter = ({ filter, setFilter }) => {
-  const [value, setValue] = useState(filter);
+
   //  only filter after 100 ms after user stop typing
+/*   const [value, setValue] = useState(filter);
   const onChange = useAsyncDebounce((value) => {
     setFilter(value || undefined);
   }, 100);
-
+ */
   return (
     <span>
       Search : {""}
       <input
-        value={value || ""}
+        value={filter || ""}
         onChange={(e) => {
-          setValue(e.target.value);
-          onChange((e) => {
-            setValue(e.target.value)
-            onChange(e.target.value)
-          })
+          setFilter(e.target.value)
         }}
       />
     </span>

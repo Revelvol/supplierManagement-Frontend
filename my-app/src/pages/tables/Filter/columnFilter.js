@@ -1,3 +1,4 @@
+// general search column filter
 export const ColumnFilter = ({ column }) => {
   const { filterValue, setFilter } = column;
   return (
@@ -11,7 +12,7 @@ export const ColumnFilter = ({ column }) => {
   );
 };
  
-
+// general true or false filter 
 export const isUsedFilter = ({ column }) => {
   const { filterValue, setFilter } = column;
   return (
