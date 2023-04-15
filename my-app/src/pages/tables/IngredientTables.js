@@ -100,11 +100,11 @@ function IngredientTables({ columns, data }) {
   return (
     <div>
       {/* Add Ingredient Form  */}
-      <div class="ingredient-form">
+      <div className="ingredient-form">
         <AddIngredientForm />
       </div>
       {/* global filter */}
-      <div class="global-filter">
+      <div className="global-filter">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
       <Styles>

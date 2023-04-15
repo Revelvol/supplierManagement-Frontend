@@ -5,6 +5,7 @@ import IngredientTables from "../tables/IngredientTables";
 import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
 import AddIngredientForm from "../forms/addIngredientForm";
 import { Link } from "react-router-dom";
+import { FaFilePdf, FaEdit } from "react-icons/fa";
 
 function IngredientManagement() {
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
@@ -69,21 +70,24 @@ function IngredientManagement() {
         Filter: isUsedFilter,
       },
       {
-        Header: "Documents"
-      },
-      {
-        Header: "Edit",
+        Header: "Documents/Edit",
         accessor: "id",
         Cell: ({ value }) => {
           return (
-            <Link to={`/ingredient-management/document/${value}`}> Document </Link>
+            <div>
+              <Link to={`/ingredient-management/document/${value}`}>
+                <FaFilePdf style={{ marginRight: "0.5rem" }} />
+              </Link>
+
+              <Link to={`/ingredient-management/edit/${value}`}>
+                <FaEdit style={{ marginRight: "0.5rem" }} />
+              </Link>
+            </div>
           );
         },
         Filter: ColumnFilter,
-        disableFilters: true, 
-        
-      }
-     
+        disableFilters: true,
+      },
     ],
     []
   );

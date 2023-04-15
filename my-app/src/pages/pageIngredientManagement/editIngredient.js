@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import BackButton from "../../components/backButton";
 
 
-function IngredientDocument () {
+function EditDocument () {
     const { ingredientId } = useParams();
 
     return (
@@ -13,4 +13,4 @@ function IngredientDocument () {
     )
 }
 
-export default IngredientDocument
+export default EditDocument

@@ -14,6 +14,7 @@ import EditSupplier from './pages/pageSupplierManagement/editSupplier';
 import {ReactQueryDevtools} from 'react-query/devtools'
 import IngredientManagement from './pages/pageIngredientManagement/ingredientsManagement';
 import IngredientDocument from './pages/pageIngredientManagement/ingredientDocument';
+import EditDocument from './pages/pageIngredientManagement/editIngredient';
 
 
 
@@ -38,6 +39,7 @@ function App() {
           <Route path='/supplier-management/edit/:supplierId'element={<EditSupplier/>} />
           <Route path= '/ingredient-management' element={<IngredientManagement/>} />
           <Route path= '/ingredient-management/document/:ingredientId' element={<IngredientDocument/>} />
+          <Route path= '/ingredient-management/edit/:ingredientId' element={<EditDocument/>} />
         </Route>
       </Routes>
       <ReactQueryDevtools initialIsOpem={false} position="bottom-right" />
