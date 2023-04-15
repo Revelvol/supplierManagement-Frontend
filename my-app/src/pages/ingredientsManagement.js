@@ -3,11 +3,12 @@ import { useGetIngredientsData } from "./query/useIngredientsData";
 import { useState, useMemo } from "react";
 import IngredientTables from "./tables/IngredientTables";
 import { ColumnFilter, isUsedFilter } from "./tables/Filter/columnFilter";
+import AddIngredientForm from "./forms/addIngredientForm";
 
 function IngredientManagement() {
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
-  
-  // ada bug di filtering yang object dan is used 
+
+  // ada bug di filtering yang object dan is used
   const columns = useMemo(
     () => [
       {
@@ -28,24 +29,28 @@ function IngredientManagement() {
       {
         Header: "Unit",
         accessor: "unit",
-        Cell: ({ value }) => {return value.abbreviation},
+        Cell: ({ value }) => {
+          return value.abbreviation;
+        },
         Filter: ColumnFilter,
-        filter: (row,columnIds, filterValue) => {
-          return row.filter(row => 
+        filter: (row, columnIds, filterValue) => {
+          return row.filter((row) =>
             row.values.unit.abbreviation.includes(filterValue)
-          )
-        }
+          );
+        },
       },
       {
         Header: "Function",
         accessor: "function",
-        Cell: ({ value }) => {return value.name},
+        Cell: ({ value }) => {
+          return value.name;
+        },
         Filter: ColumnFilter,
-        filter: (row,columnIds, filterValue) => {
-          return row.filter(row => 
+        filter: (row, columnIds, filterValue) => {
+          return row.filter((row) =>
             row.values.function.name.includes(filterValue)
-          )
-        }
+          );
+        },
       },
       {
         Header: "Is Used",
@@ -62,6 +67,20 @@ function IngredientManagement() {
           ),
         Filter: isUsedFilter,
       },
+      {
+        Header: "Documents"
+      },
+      {
+        Header: "Edit",
+        accessor: "id",
+        Cell: ({value}) =>{
+          return value
+        },
+        Filter: ColumnFilter,
+        disableFilters: true, 
+        
+      }
+     
     ],
     []
   );
@@ -105,7 +124,12 @@ function IngredientManagement() {
     });
     // if null render nothing
     if (ingredientData[0] === null) {
-      setIngredientTable("There is no ingredient, add ingredient!!!");
+      setIngredientTable(
+        <>
+          <span>There is no ingredient, add ingredient!!!</span>
+          <AddIngredientForm />
+        </>
+      );
     } else {
       setIngredientTable(
         <IngredientTables columns={columns} data={ingredientData} />

@@ -36,6 +36,7 @@ function App() {
           <Route path='/supplier-management' element={<SupplierManagement/>}/>
           <Route path='/supplier-management/edit/:supplierId'element={<EditSupplier/>} />
           <Route path= '/ingredient-management' element={<IngredientManagement/>} />
+          <Route path= '/ingredient-management/document/:ingredientId' element={<IngredientManagement/>} />
         </Route>
       </Routes>
       <ReactQueryDevtools initialIsOpem={false} position="bottom-right" />

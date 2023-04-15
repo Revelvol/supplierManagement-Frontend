@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { GlobalFilter } from "./Filter/globalFilter";
 import { Checkbox } from "./checkbox/checkbox";
+import AddIngredientForm from "../forms/addIngredientForm";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -98,8 +99,14 @@ function IngredientTables({ columns, data }) {
   // pop the function and unit data karena itu another object within object
   return (
     <div>
+      {/* Add Ingredient Form  */}
+      <div class="ingredient-form">
+        <AddIngredientForm />
+      </div>
       {/* global filter */}
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      <div class="global-filter">
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      </div>
       <Styles>
         <table {...getTableProps()}>
           <thead>
@@ -108,16 +115,16 @@ function IngredientTables({ columns, data }) {
                 {headerGroup.headers.map((column) => (
                   <th {...column.getHeaderProps()}>
                     {/* column sort  */}
-                   <span {...column.getSortByToggleProps()}>
-                      {column.render('Header')}
+                    <span {...column.getSortByToggleProps()}>
+                      {column.render("Header")}
                       {column.isSorted
                         ? column.isSortedDesc
-                          ? ' 🔽'
-                          : ' 🔼'
-                        : ''}
+                          ? " 🔽"
+                          : " 🔼"
+                        : ""}
                     </span>
                     {/* column filter */}
-                    <div >
+                    <div>
                       {column.canFilter ? column.render("Filter") : null}
                     </div>
                   </th>
