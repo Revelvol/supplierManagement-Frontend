@@ -1,9 +1,10 @@
-import { useSuppliersData } from "./query/useSuppliersData";
-import { useGetIngredientsData } from "./query/useIngredientsData";
+import { useSuppliersData } from "../query/useSuppliersData";
+import { useGetIngredientsData } from "../query/useIngredientsData";
 import { useState, useMemo } from "react";
-import IngredientTables from "./tables/IngredientTables";
-import { ColumnFilter, isUsedFilter } from "./tables/Filter/columnFilter";
-import AddIngredientForm from "./forms/addIngredientForm";
+import IngredientTables from "../tables/IngredientTables";
+import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
+import AddIngredientForm from "../forms/addIngredientForm";
+import { Link } from "react-router-dom";
 
 function IngredientManagement() {
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
@@ -73,8 +74,10 @@ function IngredientManagement() {
       {
         Header: "Edit",
         accessor: "id",
-        Cell: ({value}) =>{
-          return value
+        Cell: ({ value }) => {
+          return (
+            <Link to={`/ingredient-management/document/${value}`}> Document </Link>
+          );
         },
         Filter: ColumnFilter,
         disableFilters: true, 

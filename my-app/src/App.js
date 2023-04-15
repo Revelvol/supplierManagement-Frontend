@@ -1,18 +1,19 @@
 import './App.css';
 import React from 'react';
 import { Routes, Route, Navigate} from 'react-router-dom';
-import Home from './pages/home';
-import Login from './pages/login';
+import Home from './pages/pageHomeUser/home';
+import Login from './pages/pageHomeUser/login';
 import { useIsAuthenticated } from 'react-auth-kit';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import ProtectedRoutes from './pages/protectedRoutes';
-import Register from './pages/register';
-import Profile from './pages/profile';
-import SupplierManagement from './pages/supplierManagement';
-import EditSupplier from './pages/editSupplier';
+import ProtectedRoutes from './pages/pageHomeUser/protectedRoutes';
+import Register from './pages/pageHomeUser/register';
+import Profile from './pages/pageHomeUser/profile';
+import SupplierManagement from './pages/pageSupplierManagement/supplierManagement';
+import EditSupplier from './pages/pageSupplierManagement/editSupplier';
 
 import {ReactQueryDevtools} from 'react-query/devtools'
-import IngredientManagement from './pages/ingredientsManagement';
+import IngredientManagement from './pages/pageIngredientManagement/ingredientsManagement';
+import IngredientDocument from './pages/pageIngredientManagement/ingredientDocument';
 
 
 
@@ -36,7 +37,7 @@ function App() {
           <Route path='/supplier-management' element={<SupplierManagement/>}/>
           <Route path='/supplier-management/edit/:supplierId'element={<EditSupplier/>} />
           <Route path= '/ingredient-management' element={<IngredientManagement/>} />
-          <Route path= '/ingredient-management/document/:ingredientId' element={<IngredientManagement/>} />
+          <Route path= '/ingredient-management/document/:ingredientId' element={<IngredientDocument/>} />
         </Route>
       </Routes>
       <ReactQueryDevtools initialIsOpem={false} position="bottom-right" />

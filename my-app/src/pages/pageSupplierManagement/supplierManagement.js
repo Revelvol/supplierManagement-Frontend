@@ -1,10 +1,10 @@
 // import react table here
 
-import SupplierTables from "./tables/supplierTables";
+import SupplierTables from "../tables/supplierTables";
 import { useState } from "react";
 import React from "react";
-import AddSupplierForm from "./forms/addSupplierForm";
-import { useDocumentQueries, useSuppliersData } from "./query/useSuppliersData";
+import AddSupplierForm from "../forms/addSupplierForm";
+import { useDocumentQueries, useSuppliersData } from "../query/useSuppliersData";
 
 
 function SupplierManagement() {
