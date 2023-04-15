@@ -70,15 +70,11 @@ function IngredientManagement() {
         Filter: isUsedFilter,
       },
       {
-        Header: "Documents/Edit",
+        Header: "Edit",
         accessor: "id",
         Cell: ({ value }) => {
           return (
             <div>
-              <Link to={`/ingredient-management/document/${value}`}>
-                <FaFilePdf style={{ marginRight: "0.5rem" }} />
-              </Link>
-
               <Link to={`/ingredient-management/edit/${value}`}>
                 <FaEdit style={{ marginRight: "0.5rem" }} />
               </Link>
@@ -87,6 +83,18 @@ function IngredientManagement() {
         },
         Filter: ColumnFilter,
         disableFilters: true,
+      },
+      {
+        Header: "Documents",
+        columns: [
+          { Header: "ISO" },
+          { Header: "GMO" },
+          { Header: "Kosher" },
+          { Header: "Halal" },
+          { Header: "MSDS" },
+          { Header: "COA" },
+          { Header: "Allergen" },
+        ],
       },
     ],
     []
