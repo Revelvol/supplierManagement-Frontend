@@ -69,31 +69,31 @@ function IngredientManagement() {
           ),
         Filter: isUsedFilter,
       },
-      {
-        Header: "Edit",
-        accessor: "id",
-        Cell: ({ value }) => {
-          return (
-            <div>
-              <Link to={`/ingredient-management/edit/${value}`}>
-                <FaEdit style={{ marginRight: "0.5rem" }} />
-              </Link>
-            </div>
-          );
-        },
-        Filter: ColumnFilter,
-        disableFilters: true,
-      },
+      // {
+      //   Header: "Edit",
+      //   accessor: "id",
+      //   Cell: ({ value }) => {
+      //     return (
+      //       <div>
+      //         <Link to={`/ingredient-management/edit/${value}`}>
+      //           <FaEdit style={{ marginRight: "0.5rem" }} />
+      //         </Link>
+      //       </div>
+      //     );
+      //   },
+      //   Filter: ColumnFilter,
+      //   disableFilters: true,
+      // },
       {
         Header: "Documents",
         columns: [
-          { Header: "ISO" },
-          { Header: "GMO" },
-          { Header: "Kosher" },
-          { Header: "Halal" },
-          { Header: "MSDS" },
-          { Header: "COA" },
-          { Header: "Allergen" },
+          { Header: "ISO", Filter: ColumnFilter, disableFilters: true },
+          { Header: "GMO", Filter: ColumnFilter, disableFilters: true },
+          { Header: "Kosher", Filter: ColumnFilter, disableFilters: true },
+          { Header: "Halal", Filter: ColumnFilter, disableFilters: true },
+          { Header: "MSDS", Filter: ColumnFilter, disableFilters: true },
+          { Header: "COA", Filter: ColumnFilter, disableFilters: true },
+          { Header: "Allergen", Filter: ColumnFilter, disableFilters: true },
         ],
       },
     ],
@@ -111,6 +111,8 @@ function IngredientManagement() {
     error: ingredientsError,
     data: ingredientsData,
   } = useGetIngredientsData();
+  
+
 
   if (suppliersIsLoading || ingredientsIsLoading) {
     return "is loading .... ";

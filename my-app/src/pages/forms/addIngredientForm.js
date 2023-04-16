@@ -14,6 +14,7 @@ function AddIngredientForm() {
     error: unitsError,
     data: unitsData,
   } = useGetUnitsData();
+  
   const functionsOption = functionsData?.data.map((func) => func.name);
   const unitsOption = unitsData?.data.map((unit) => unit.name);
 

@@ -7,13 +7,7 @@ const fetchIngredientsData = () => {
     "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/"
   );
 };
-const fetchIngredientsDataSupplier = ({ queryKey }) => {
-  /* Fetch ingredient data based on supplier id */
-  const supplierId = queryKey[1];
-  return axios.get(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/?supplier_id=${supplierId}`
-  );
-};
+
 
 const addIngredientData = (data) => {
   const payload = {
@@ -36,15 +30,10 @@ const addIngredientData = (data) => {
   );
 };
 
-export const useGetIngredientsData = (supplierId = null) => {
-  // useQuery hook to get all the ingredients
-  // if the supplierID is passed, it can get all the ingredients based on the supplier ID
-  const queryKey = supplierId
-    ? ["ingredientsData", supplierId]
-    : "ingredientsData";
-  const queryFn = supplierId
-    ? fetchIngredientsDataSupplier
-    : fetchIngredientsData;
+export const useGetIngredientsData = () => {
+  /* usequeryhook to get all ingredients */
+  const queryKey = "ingredientsData";
+  const queryFn = fetchIngredientsData;
   return useQuery(queryKey, queryFn);
 };
 
