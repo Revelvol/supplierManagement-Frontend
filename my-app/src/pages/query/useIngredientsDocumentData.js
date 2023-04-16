@@ -1,31 +1,32 @@
 import axios from "axios";
-import { useQueryClient, useQuery, useMutation } from "react-query";
+import { useQueries } from "react-query";
 
-const fetchIngredientsDocumentData = ({ queryKey }) => {
-  const ingredientId = queryKey[1];
+const fetchIngredientsDocumentData = async (ingredientId) => {
   const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${ingredientId}/upload-document/`;
-  return axios.get(url);
+  const response = await axios.get(url);
+  if (!response.ok) {
+    return {
+      ingredient: ingredientId,
+      isoDocument: null,
+      gmoDocument: null,
+      kosherDocument: null,
+      halalDocument: null,
+      msdsDocument: null,
+      tdsDocument: null,
+      coaDocument: null,
+      allergenDocument: null,
+    };
+  } else {
+    return response.json();
+  }
 };
 
-export const useGetIngredientsDocumentData = (ingredientId) => {
+export const useGetIngredientsDocumentsData = (ingredientData) => {
   /* usequery hook get document ingredient data 
-  with the coresponding supplier */
-  const queryClient = useQueryClient();
-  const queryKey = ["ingredientDocuments", ingredientId];
-  const queryFn = fetchIngredientsDocumentData;
-  return useQuery(queryKey, queryFn, {
-    initialData: () => {
-      const documents = queryClient
-        .getQueriesData(["ingredientDocuments", ingredientId])
-        ?.data.find();
+  with the coresponding ingredient data  */
 
-      if (documents) {
-        return {
-          data: document,
-        };
-      } else {
-        return undefined;
-      }
-    },
-  });
+  return useQueries(ingredientData?.data.map((ingredient) => ({
+    queryKey: ["ingredientDocumentData", ingredient.id],
+    queryFn: fetchIngredientsDocumentData(ingredient.id)
+  })) || []);
 };
