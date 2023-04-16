@@ -6,6 +6,7 @@ import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
 import AddIngredientForm from "../forms/addIngredientForm";
 import { Link } from "react-router-dom";
 import { FaFilePdf, FaEdit } from "react-icons/fa";
+import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
 
 function IngredientManagement() {
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
@@ -112,9 +113,13 @@ function IngredientManagement() {
     data: ingredientsData,
   } = useGetIngredientsData();
   
+  const {
+    isLoading: ingredientDocumentIsLoading,
+    data: ingredientDocumentData
+  } = useGetIngredientsDocumentsData(ingredientsData)
 
 
-  if (suppliersIsLoading || ingredientsIsLoading) {
+  if (suppliersIsLoading || ingredientsIsLoading || ingredientDocumentIsLoading) {
     return "is loading .... ";
   }
 

@@ -3,23 +3,13 @@ import { useQueries } from "react-query";
 
 const fetchIngredientsDocumentData = async ({ queryKey }) => {
   const ingredientId = queryKey[1];
+  console.log(ingredientId)
   const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${ingredientId}/upload-document/`;
   const response = await axios.get(url);
-  if (!response.ok) {
-    return {
-      ingredient: ingredientId,
-      isoDocument: null,
-      gmoDocument: null,
-      kosherDocument: null,
-      halalDocument: null,
-      msdsDocument: null,
-      tdsDocument: null,
-      coaDocument: null,
-      allergenDocument: null,
-    };
-  } else {
-    return response.json();
-  }
+
+  return response.data;
+
+
 };
 
 export const useGetIngredientsDocumentsData = (ingredientData) => {
