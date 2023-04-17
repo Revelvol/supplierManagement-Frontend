@@ -48,10 +48,12 @@ function IngredientTables({ columns, data }) {
       columns: columns,
       data: ingredientData,
     },
+    useGlobalFilter,
     useFilters,
     useSortBy,
     usePagination,
     useRowSelect,
+   
     // row selection function
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
@@ -87,19 +89,23 @@ function IngredientTables({ columns, data }) {
     setPageSize,
     state,
     selectedFlatRows,
+    setGlobalFilter,
   } = tableInstance;
 
   /*selected rows are selected in the selectedFlatRows, might want  to json stringtify first)
   di original nya 
   */
 
-  const { pageIndex, pageSize } = state;
+  const { pageIndex, globalFilter,  pageSize } = state;
   // pop the function and unit data karena itu another object within object
   return (
     <div>
       {/* Add Ingredient Form  */}
       <div className="ingredient-form">
         <AddIngredientForm />
+      </div>
+      <div className="global-filter-container">
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
       <Styles>
         <table {...getTableProps()}>
