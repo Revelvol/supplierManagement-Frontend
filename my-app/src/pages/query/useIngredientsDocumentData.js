@@ -3,7 +3,6 @@ import { useQueries } from "react-query";
 
 const fetchIngredientsDocumentData = async ({ queryKey }) => {
   const ingredientId = queryKey[1];
-  console.log(ingredientId)
   const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${ingredientId}/upload-document/`;
   const response = await axios.get(url);
 

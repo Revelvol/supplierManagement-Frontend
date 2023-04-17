@@ -12,7 +12,7 @@ function IngredientManagement() {
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
 
   // ada bug di filtering yang object dan is used
-  const columns = useMemo(
+  const COLUMNS = useMemo(
     () => [
       {
         Header: "Ingredient Name",
@@ -88,13 +88,90 @@ function IngredientManagement() {
       {
         Header: "Documents",
         columns: [
-          { Header: "ISO", Filter: ColumnFilter, disableFilters: true },
-          { Header: "GMO", Filter: ColumnFilter, disableFilters: true },
-          { Header: "Kosher", Filter: ColumnFilter, disableFilters: true },
-          { Header: "Halal", Filter: ColumnFilter, disableFilters: true },
-          { Header: "MSDS", Filter: ColumnFilter, disableFilters: true },
-          { Header: "COA", Filter: ColumnFilter, disableFilters: true },
-          { Header: "Allergen", Filter: ColumnFilter, disableFilters: true },
+          {
+            Header: "ISO",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "isoDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
+          {
+            Header: "GMO",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "gmoDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
+          {
+            Header: "Kosher",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "kosherDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
+          {
+            Header: "Halal",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "halalDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
+          {
+            Header: "MSDS",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "msdsDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
+          {
+            Header: "COA",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "coaDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
+          {
+            Header: "Allergen",
+            Filter: ColumnFilter,
+            disableFilters: true,
+            accessor: "allergenDocument",
+            Cell: ({ value }) =>
+              value ? (
+                <a href={value} target="_blank">
+                  <FaFilePdf />
+                </a>
+              ) : null,
+          },
         ],
       },
     ],
@@ -112,32 +189,66 @@ function IngredientManagement() {
     error: ingredientsError,
     data: ingredientsData,
   } = useGetIngredientsData();
-  
-  const {
-    isLoading: ingredientDocumentIsLoading,
-    data: ingredientDocumentData
-  } = useGetIngredientsDocumentsData(ingredientsData)
 
+  const documentQueries = useGetIngredientsDocumentsData(ingredientsData);
 
-  if (suppliersIsLoading || ingredientsIsLoading || ingredientDocumentIsLoading) {
+  const ingredientsWithDocumentData = ingredientsData?.data.map(
+    /* map ingredient with document data */
+    (ingredient) => {
+      try {
+        const documents = documentQueries.find(
+          (query) => parseInt(query.data.ingredient) === parseInt(ingredient.id)
+        ).data;
+        const mergedData = {
+          ...ingredient,
+          ...documents,
+        };
+
+        delete mergedData.ingredient;
+        return mergedData;
+      } catch (err) {
+        // error happen here
+      }
+    }
+  );
+
+  if (
+    suppliersIsLoading ||
+    ingredientsIsLoading ||
+    documentQueries.some((query) => query.isLoading)
+  ) {
     return "is loading .... ";
   }
 
-  if (suppliersError || ingredientsError) {
+  if (
+    suppliersError ||
+    ingredientsError ||
+    documentQueries.some((query) => query.error)
+  ) {
+    let alertMessage = "";
+    if (suppliersError) {
+      alertMessage += suppliersError.message + " ";
+    }
+    if (ingredientsError) {
+      alertMessage += ingredientsError.message + " ";
+    }
+    documentQueries.forEach((query) => {
+      if (query.error) {
+        alertMessage += query.error.message + " ";
+      }
+    });
     return (
       <div className="alert alert-danger" role="alert">
-        {suppliersError.message}
-        {ingredientsError.message}
+        {alertMessage}
       </div>
     );
   }
 
   const handleSupplierClick = (event) => {
-    /* filter the supplier click here from ingredients that has been selected, 
-    can be server filtered or di filter client,
-    this will filter yang udh difetch ingridients all */
+    /* set the displayed table of ingredient 
+    based on the supplier clicked*/
     const supplierId = event.target.parentNode.id;
-    const ingredientData = ingredientsData.data.map((ingredient) => {
+    const ingredientData = ingredientsWithDocumentData.map((ingredient) => {
       if (ingredient.supplier === parseInt(supplierId)) {
         return ingredient;
       } else {
@@ -154,7 +265,7 @@ function IngredientManagement() {
       );
     } else {
       setIngredientTable(
-        <IngredientTables columns={columns} data={ingredientData} />
+        <IngredientTables columns={COLUMNS} data={ingredientData} />
       );
     }
   };
