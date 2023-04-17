@@ -10,7 +10,7 @@ const fetchUnitsData = () => {
 
 export const useGetUnitsData = () => {
     /* React Query Hook to fetch units Data  */
-  const queryKey = "functions"
+  const queryKey = "units"
   const queryFn = fetchUnitsData
   return useQuery(queryKey, queryFn);
 };
