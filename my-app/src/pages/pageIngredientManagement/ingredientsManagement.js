@@ -99,6 +99,7 @@ function IngredientManagement() {
                   <FaFilePdf />
                 </a>
               ) : null,
+              
           },
           {
             Header: "GMO",

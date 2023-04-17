@@ -49,7 +49,6 @@ function IngredientTables({ columns, data }) {
       data: ingredientData,
     },
     useFilters,
-    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
@@ -87,7 +86,6 @@ function IngredientTables({ columns, data }) {
     pageCount,
     setPageSize,
     state,
-    setGlobalFilter,
     selectedFlatRows,
   } = tableInstance;
 
@@ -95,17 +93,13 @@ function IngredientTables({ columns, data }) {
   di original nya 
   */
 
-  const { pageIndex, globalFilter, pageSize } = state;
+  const { pageIndex, pageSize } = state;
   // pop the function and unit data karena itu another object within object
   return (
     <div>
       {/* Add Ingredient Form  */}
       <div className="ingredient-form">
         <AddIngredientForm />
-      </div>
-      {/* global filter */}
-      <div className="global-filter">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
       <Styles>
         <table {...getTableProps()}>
