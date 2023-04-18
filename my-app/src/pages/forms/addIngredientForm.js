@@ -3,8 +3,10 @@ import { useGetUnitsData } from "../query/useUnitsData";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
+import { useAuthHeader } from "react-auth-kit";
 
 function AddIngredientForm({ supplierId }) {
+  const token = useAuthHeader()
   const pdfInputLabel = (name) => {
     /* helper function to put document jsx label  */
     return (
@@ -50,6 +52,8 @@ function AddIngredientForm({ supplierId }) {
     return <div>Error</div>;
   }
   register("supplier", { value: supplierId })
+  register("token", {value: token()})
+  // register("id", )
   return (
     <div>
       Add Ingredient

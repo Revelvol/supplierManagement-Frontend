@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useQueries } from "react-query";
+import { useQueries, useMutation } from "react-query";
+import { useQueryClient } from "react-query";
 
 const fetchIngredientsDocumentData = async ({ queryKey }) => {
   const ingredientId = queryKey[1];
@@ -7,8 +8,28 @@ const fetchIngredientsDocumentData = async ({ queryKey }) => {
   const response = await axios.get(url);
 
   return response.data;
+};
 
+const addIngredientDocumentData = (data) => {
+  const payload = {
+    isoDocument: data.isoDocument,
+    gmoDocument: data.gmoDocument,
+    kosherDocument: data.kosherDocument,
+    halalDocument: data.halalDocument,
+    msdsDocument: data.msdsDocument,
+    tdsDocument: data.tdsDocument,
+    coaDocument: data.coaDocument,
+    allergenDocument: data.allergenDocument,
+  };
 
+  const ingredientId = data.id;
+  const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${ingredientId}/upload-document/`;
+  return axios.post(url, payload, {
+    headers: {
+      Authorization: data.token,
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const useGetIngredientsDocumentsData = (ingredientData) => {
@@ -23,6 +44,8 @@ export const useGetIngredientsDocumentsData = (ingredientData) => {
   );
 };
 
-export const usePostIngredientsDocumentData = (documentsData) => {
-  
-}
+export const useAddIngredientsDocumentData = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addIngredientDocumentData);
+};

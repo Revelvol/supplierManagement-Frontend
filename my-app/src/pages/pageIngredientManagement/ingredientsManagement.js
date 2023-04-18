@@ -256,7 +256,6 @@ function IngredientManagement() {
         return null;
       }
     });
-    // if null render nothing
     if (ingredientData[0] === null) {
       setIngredientTable(
         <>

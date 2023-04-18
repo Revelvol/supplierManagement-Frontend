@@ -11,7 +11,7 @@ const fetchIngredientsData = () => {
 
 const addIngredientData = (data) => {
   const payload = {
-    supplier: data.supplierId,
+    supplier: data.supplier,
     name: data.name,
     price: data.price,
     quantity: data.quantity,
@@ -24,7 +24,6 @@ const addIngredientData = (data) => {
       headers: {
         Authorization: data.token,
         "Content-Type": "application/json",
-
       }
     }
   );
