@@ -4,9 +4,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 import { useAuthHeader } from "react-auth-kit";
+import { useAddIngredientData } from "../query/useIngredientsData";
+import { useAddIngredientsDocumentData } from "../query/useIngredientsDocumentData";
 
 function AddIngredientForm({ supplierId }) {
-  const token = useAuthHeader()
+  const token = useAuthHeader();
   const pdfInputLabel = (name) => {
     /* helper function to put document jsx label  */
     return (
@@ -37,22 +39,49 @@ function AddIngredientForm({ supplierId }) {
     data: unitsData,
   } = useGetUnitsData();
 
-  const functionsOption = functionsData?.data.map((func) => func.name);
-  const unitsOption = unitsData?.data.map((unit) => unit.abbreviation);
+  const {
+    mutate: addIngredient,
+    isLoading: addIngredientIsLoading,
+    error: addIngredientError,
+  } = useAddIngredientData();
+
+  const {
+    mutate: addIngredientDocument,
+    isLoading: addIngredientDocumentIsLoading,
+    error: addIngredientDocumentError,
+  } = useAddIngredientsDocumentData();
+
+  const functionsOption = functionsData?.data
+  const unitsOption = unitsData?.data
 
   const onSubmit = (data) => {
-    console.log(data);
+    // add ingredrient and retreive its ingredient id
+    addIngredient(
+      { data: data },
+      {
+        onSuccess: (res) => {
+          console.log(res);
+        },
+      }
+    );
+
+    //
   };
 
-  if (functionsIsLoading || unitsIsLoading) {
+  if (
+    functionsIsLoading ||
+    unitsIsLoading ||
+    addIngredientDocumentIsLoading ||
+    addIngredientIsLoading
+  ) {
     return <div>Loading...</div>;
   }
 
-  if (functionsError || unitsError) {
+  if (functionsError || unitsError || addIngredientDocumentError) {
     return <div>Error</div>;
   }
-  register("supplier", { value: supplierId })
-  register("token", {value: token()})
+  register("supplier", { value: supplierId });
+  register("token", { value: token() });
   // register("id", )
   return (
     <div>
@@ -68,8 +97,8 @@ function AddIngredientForm({ supplierId }) {
 
         <select {...register("unit")} placeholder="unit">
           {unitsOption.map((option) => (
-            <option key={option} value={option}>
-              {option}
+            <option key={option.id} value={JSON.stringify(option)}>
+              {option.abbreviation}
             </option>
           ))}
         </select>
@@ -78,8 +107,8 @@ function AddIngredientForm({ supplierId }) {
         {errors.unit && <span>{errors.unit.message}</span>}
         <select {...register("function")} placeholder="function">
           {functionsOption.map((option) => (
-            <option key={option} value={option}>
-              {option}
+            <option key={option.id} value={JSON.stringify(option)}>
+              {option.name}
             </option>
           ))}
         </select>

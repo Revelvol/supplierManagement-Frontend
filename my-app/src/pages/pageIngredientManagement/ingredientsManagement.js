@@ -4,8 +4,7 @@ import { useState, useMemo } from "react";
 import IngredientTables from "../tables/IngredientTables";
 import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
 import AddIngredientForm from "../forms/addIngredientForm";
-import { Link } from "react-router-dom";
-import { FaFilePdf, FaEdit } from "react-icons/fa";
+import { FaFilePdf} from "react-icons/fa";
 import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
 
 function IngredientManagement() {

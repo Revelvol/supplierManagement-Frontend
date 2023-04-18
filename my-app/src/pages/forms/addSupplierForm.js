@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import supplierSchema from "../../validations/supplierValidation";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
 import { useAuthHeader } from "react-auth-kit";
-import { 
+import {
   useAddSupplier,
   useAddSupplierDocument,
 } from "../query/useSuppliersData";
@@ -16,16 +16,12 @@ function AddSupplierForm() {
   const { register, handleSubmit, reset } = useForm();
 
   const token = useAuthHeader();
-  const {
-    mutate: addSupplier,
-    isLoading: addSupplierIsLoading,
-
-  } = useAddSupplier();
+  const { mutate: addSupplier, isLoading: addSupplierIsLoading } =
+    useAddSupplier();
 
   const {
     mutate: addSupplierDocument,
     isLoading: addSupplierDocumentIsLoading,
-
   } = useAddSupplierDocument();
 
   useEffect(() => {

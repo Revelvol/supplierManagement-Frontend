@@ -45,7 +45,12 @@ export const useGetIngredientsDocumentsData = (ingredientData) => {
 };
 
 export const useAddIngredientsDocumentData = () => {
+  /* usequery hook to add ingredient document data */
   const queryClient = useQueryClient();
 
-  return useMutation(addIngredientDocumentData);
+  return useMutation(addIngredientDocumentData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("ingredientsDocumentData");
+    }
+  });
 };
