@@ -20,13 +20,13 @@ export const INGREDIENT_SCHEMA = object({
   price: string()
     .matches(
       /^-?\d{0,8}(?:\.\d{0,2})?$/,
-      "Price must be a valid decimal number with 2 digits after decimal point "
+      "Price must be a valid 8 digit decimal number with 2 digits after decimal point "
     )
     .required("This field is required"),
   quantity: string()
     .matches(
       /^-?\d{0,8}(?:\.\d{0,2})?$/,
-      "Quantity must be a valid decimal number with 2 digits after decimal point "
+      "Quantity must be a valid 8 digit decimal number with 2 digits after decimal point "
     )
     .required("This field is required"),
   is_used: boolean().required("this field is required"),

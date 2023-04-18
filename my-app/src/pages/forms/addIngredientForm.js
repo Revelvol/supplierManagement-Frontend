@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 
-function AddIngredientForm() {
+function AddIngredientForm({ supplierId }) {
   const pdfInputLabel = (name) => {
     /* helper function to put document jsx label  */
     return (
@@ -19,6 +19,7 @@ function AddIngredientForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(INGREDIENT_SCHEMA),
   });
@@ -37,7 +38,7 @@ function AddIngredientForm() {
   const functionsOption = functionsData?.data.map((func) => func.name);
   const unitsOption = unitsData?.data.map((unit) => unit.abbreviation);
 
-  const handleFormSubmit = (data) => {
+  const onSubmit = (data) => {
     console.log(data);
   };
 
@@ -48,11 +49,11 @@ function AddIngredientForm() {
   if (functionsError || unitsError) {
     return <div>Error</div>;
   }
-  //   terakhir kali disini dimana formnya mau diimplemment gimana
+  register("supplier", { value: supplierId })
   return (
     <div>
       Add Ingredient
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} placeholder="Ingredient Name" />
         {errors.name && <span>{errors.name.message}</span>}
         <br></br>
@@ -95,7 +96,8 @@ function AddIngredientForm() {
         {pdfInputLabel("tdsDocument")}
         {pdfInputLabel("coaDocument")}
         {pdfInputLabel("allergenDocument")}
-        <input type="submit" />
+
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

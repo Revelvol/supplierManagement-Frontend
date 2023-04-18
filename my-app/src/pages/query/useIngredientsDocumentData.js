@@ -22,3 +22,7 @@ export const useGetIngredientsDocumentsData = (ingredientData) => {
     })) || []
   );
 };
+
+export const usePostIngredientsDocumentData = (documentsData) => {
+  
+}

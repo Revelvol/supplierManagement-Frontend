@@ -100,10 +100,6 @@ function IngredientTables({ columns, data }) {
   // pop the function and unit data karena itu another object within object
   return (
     <div>
-      {/* Add Ingredient Form  */}
-      <div className="ingredient-form">
-        <AddIngredientForm />
-      </div>
       <div className="global-filter-container">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>

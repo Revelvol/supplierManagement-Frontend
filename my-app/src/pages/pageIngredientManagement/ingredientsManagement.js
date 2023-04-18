@@ -261,12 +261,15 @@ function IngredientManagement() {
       setIngredientTable(
         <>
           <span>There is no ingredient, add ingredient!!!</span>
-          <AddIngredientForm />
+          <AddIngredientForm supplierId={supplierId}/>
         </>
       );
     } else {
       setIngredientTable(
+         <> 
+         <AddIngredientForm supplierId={supplierId} />
         <IngredientTables columns={COLUMNS} data={ingredientData} />
+        </>
       );
     }
   };
