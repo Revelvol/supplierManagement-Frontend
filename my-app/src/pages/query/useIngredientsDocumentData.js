@@ -10,7 +10,7 @@ const fetchIngredientsDocumentData = async ({ queryKey }) => {
   return response.data;
 };
 
-const addIngredientDocumentData = (data) => {
+const addIngredientDocumentData = ({data, id}) => {
   const payload = {
     isoDocument: data.isoDocument,
     gmoDocument: data.gmoDocument,
@@ -22,8 +22,7 @@ const addIngredientDocumentData = (data) => {
     allergenDocument: data.allergenDocument,
   };
 
-  const ingredientId = data.id;
-  const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${ingredientId}/upload-document/`;
+  const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/upload-document/`;
   return axios.post(url, payload, {
     headers: {
       Authorization: data.token,
@@ -47,7 +46,7 @@ export const useGetIngredientsDocumentsData = (ingredientData) => {
 export const useAddIngredientsDocumentData = () => {
   /* usequery hook to add ingredient document data */
   const queryClient = useQueryClient();
-
+  // MIGHT BE EEORR HGERE gitgdd .d 
   return useMutation(addIngredientDocumentData, {
     onSuccess: () => {
       queryClient.invalidateQueries("ingredientsDocumentData");

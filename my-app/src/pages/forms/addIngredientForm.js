@@ -60,12 +60,15 @@ function AddIngredientForm({ supplierId }) {
       { data: data },
       {
         onSuccess: (res) => {
-          console.log(res);
+          const ingredientId = res.data.id
+          // add ingredient document ERRROR 
+          addIngredientDocument({data:data, id:ingredientId}, {
+            onSuccess: (res) => {console.log(res.data)}
+          })
         },
       }
     );
 
-    //
   };
 
   if (
