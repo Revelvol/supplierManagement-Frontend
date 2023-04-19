@@ -42,7 +42,7 @@ const Styles = styled.div`
 `;
 
 function IngredientTables({ columns, data }) {
-  const ingredientData = useMemo(() => data, []);
+  const ingredientData = data
   const tableInstance = useTable(
     {
       columns: columns,

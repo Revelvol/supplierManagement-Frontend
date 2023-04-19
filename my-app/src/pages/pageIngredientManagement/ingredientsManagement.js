@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import IngredientTables from "../tables/IngredientTables";
 import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
 import AddIngredientForm from "../forms/addIngredientForm";
-import { FaFilePdf} from "react-icons/fa";
+import { FaFilePdf } from "react-icons/fa";
 import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
 
 function IngredientManagement() {
@@ -98,7 +98,6 @@ function IngredientManagement() {
                   <FaFilePdf />
                 </a>
               ) : null,
-              
           },
           {
             Header: "GMO",
@@ -248,25 +247,32 @@ function IngredientManagement() {
     /* set the displayed table of ingredient 
     based on the supplier clicked*/
     const supplierId = event.target.parentNode.id;
-    const ingredientData = ingredientsWithDocumentData.map((ingredient) => {
+    const ingredientData = ingredientsWithDocumentData.filter((ingredient) => {
       if (ingredient.supplier === parseInt(supplierId)) {
         return ingredient;
       } else {
         return null;
       }
     });
-    if (ingredientData[0] === null) {
+
+
+
+
+    
+
+
+    if (ingredientData.length === 0) {
       setIngredientTable(
         <>
           <span>There is no ingredient, add ingredient!!!</span>
-          <AddIngredientForm supplierId={supplierId}/>
+          <AddIngredientForm supplierId={supplierId} />
         </>
       );
     } else {
       setIngredientTable(
-         <> 
-         <AddIngredientForm supplierId={supplierId} />
-        <IngredientTables columns={COLUMNS} data={ingredientData} />
+        <>
+          <AddIngredientForm supplierId={supplierId} />
+          <IngredientTables columns={COLUMNS} data={ingredientData} />
         </>
       );
     }

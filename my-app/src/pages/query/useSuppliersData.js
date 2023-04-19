@@ -41,7 +41,6 @@ const addSupplierDocument = (data) => {
     },
     body: documents,
   });
-
   return supplierDocumentResponse;
 };
 

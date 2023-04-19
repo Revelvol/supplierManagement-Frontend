@@ -20,7 +20,6 @@ const addIngredientData = ({data}) => {
     function: JSON.parse(data.function), 
     unit: JSON.parse(data.unit),
   }
-  console.log(payload)
   return axios.post(
     "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/", payload, {
       headers: {

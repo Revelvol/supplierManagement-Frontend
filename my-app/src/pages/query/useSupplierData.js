@@ -32,6 +32,7 @@ const putSupplierData = (data) => {
 const patchDocumentData = (data) => {
   const documents = new FormData();
   if (data.payload.isoDocument) {
+    
     documents.append("isoDocument", data.payload.isoDocument);
   }
 
