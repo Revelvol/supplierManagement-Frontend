@@ -37,12 +37,30 @@ function buildFormData( data) {
 const addIngredientDocumentData = ({ data, id }) => {
   const formData = buildFormData(data);
   const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/upload-document/`;
-  return axios.post(url, formData, {
+  
+  return axios.get(url, {
     headers: {
       Authorization: data.token,
     },
+  })
+  .then(response => {
+    // Document already exists, so do a PATCH request
+    return axios.patch(url, formData, {
+      headers: {
+        Authorization: data.token,
+      },
+    });
+  })
+  .catch(error => {
+    // Document doesn't exist, so do a POST request
+    return axios.post(url, formData, {
+      headers: {
+        Authorization: data.token,
+      },
+    });
   });
 };
+
 
 export const useGetIngredientsDocumentsData = (ingredientData) => {
   /* usequery hook get document ingredient data 

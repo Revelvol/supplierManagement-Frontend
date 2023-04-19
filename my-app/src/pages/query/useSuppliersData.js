@@ -34,14 +34,27 @@ const addSupplierDocument = (data) => {
     documents.append("gmpDocument", data.documents.gmpDocument);
   }
 
-  const supplierDocumentResponse = fetch(supplierDocumentUrl, {
-    method: "POST",
+  return axios.get(supplierDocumentUrl, {
     headers: {
       Authorization: token,
     },
-    body: documents,
+  })
+  .then(response => {
+    // Document already exists, so do a PATCH request
+    return axios.patch(supplierDocumentUrl, documents, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  })
+  .catch(error => {
+    // Document doesn't exist, so do a POST request
+    return axios.post(supplierDocumentUrl, documents, {
+      headers: {
+        Authorization: token,
+      },
+    });
   });
-  return supplierDocumentResponse;
 };
 
 const fetchSuppliersData = () => {
