@@ -82,8 +82,8 @@ export const usePutSupplierData = (supplierId) => {
   const queryClient = useQueryClient();
   return useMutation(putSupplierData, {
     onSuccess: () => {
-      queryClient.invalidateQueries("suppliersData");
-      queryClient.invalidateQueries(["supplierData", supplierId]);
+      queryClient.invalidateQueries(["suppliersData"]);
+      queryClient.invalidateQueries(["supplierData", parseInt(supplierId)]);
     },
   });
 };

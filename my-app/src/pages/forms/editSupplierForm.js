@@ -10,10 +10,13 @@ import {
 } from "../query/useSupplierData";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
 import BackButton from "../../components/backButton";
+
 import { useQueryClient } from "react-query";
+import { useSuppliersData } from "../query/useSuppliersData";
 
 function EditSupplierForm(props) {
   const queryClient = useQueryClient();
+  useSuppliersData();
   const [showIso, setShowIso] = useState(false);
   const [showGmp, setShowGmp] = useState(false);
   const [showHaccp, setShowHaccp] = useState(false);
