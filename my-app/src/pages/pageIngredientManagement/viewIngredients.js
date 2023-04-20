@@ -3,6 +3,7 @@ import BackButton from "../../components/backButton";
 import { useGetIngredientsData } from "../query/useIngredientsData";
 import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
 import IngredientTables from "../tables/IngredientTables";
+import AddIngredientForm from "../forms/addIngredientForm";
 
 function ViewIngredients() {
   const { supplierId } = useParams();
@@ -50,7 +51,6 @@ function ViewIngredients() {
   return (
     <>
       <BackButton />
-      <div> Ingredient view </div>
       <IngredientTables data={ingredientData} />
     </>
   );

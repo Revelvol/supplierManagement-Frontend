@@ -61,7 +61,7 @@ export const useSupplierData = (supplierId) => {
   /*  because the data is already fetch in the main,
    it is better to just do background fetch and serve already existed data */
   const queryClient = useQueryClient();
-  return useQuery(["supplierData", supplierId], fetchSupplierData, {
+  return useQuery(["supplierData", parseInt(supplierId)], fetchSupplierData, {
     initialData: () => {
       const supplier = queryClient
         .getQueryData("suppliers")
@@ -92,7 +92,7 @@ export const usePatchSupplierDocumentData = (supplierId) => {
   const queryClient = useQueryClient();
   return useMutation(patchDocumentData, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["documentData", supplierId]);
+      queryClient.invalidateQueries(["documentData", parseInt(supplierId)]);
     },
   });
 };
@@ -105,7 +105,7 @@ export const useSupplierDocumentData = (supplierId) => {
   return useQuery(["documentData", supplierId], fetchSupplierDocumentData, {
     initialData: () => {
       const document = queryClient
-        .getQueryData(["documentData", supplierId])
+        .getQueryData(["documentData", parseInt(supplierId)])
         ?.data.find();
       if (document) {
         return {

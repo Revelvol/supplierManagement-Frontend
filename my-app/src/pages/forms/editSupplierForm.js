@@ -1,16 +1,19 @@
-import {
-  useSupplierData,
-  useSupplierDocumentData,
-} from "../query/useSupplierData";
+import { useSupplierData } from "../query/useSupplierData";
 import { useForm } from "react-hook-form";
 import { useAuthHeader } from "react-auth-kit";
 import { FaFilePdf } from "react-icons/fa";
 import { useState } from "react";
 import supplierSchema from "../../validations/supplierValidation";
-import { usePutSupplierData, usePatchSupplierDocumentData } from "../query/useSupplierData";
+import {
+  usePutSupplierData,
+  usePatchSupplierDocumentData,
+} from "../query/useSupplierData";
 import supplierDocumentSchema from "../../validations/supplierDocumentValidation";
+import BackButton from "../../components/backButton";
+import { useQueryClient } from "react-query";
 
 function EditSupplierForm(props) {
+  const queryClient = useQueryClient();
   const [showIso, setShowIso] = useState(false);
   const [showGmp, setShowGmp] = useState(false);
   const [showHaccp, setShowHaccp] = useState(false);
@@ -19,17 +22,14 @@ function EditSupplierForm(props) {
   const supplierId = props.supplierId;
   const {
     mutate: editSupplier,
-  
     isLoading: editSupplierIsLoading,
+    isSuccess: editSupplierIsSuccess,
   } = usePutSupplierData(supplierId);
 
   const {
-    mutate: editSupplierDocument, 
-    data: editSupplierDocumentData,
+    mutate: editSupplierDocument,
     isLoading: editSupplierDocumentIsLoading,
-    isError: editSupplierDocumentIsError,
-    error: editSupplierDocumentError, 
-  } = usePatchSupplierDocumentData(supplierId)
+  } = usePatchSupplierDocumentData(supplierId);
 
   const handleGmpChange = () => {
     setShowGmp(true);
@@ -48,12 +48,10 @@ function EditSupplierForm(props) {
     isError: supplierIsError,
     error: supplierError,
   } = useSupplierData(supplierId);
-  const {
-    data: document,
-    isLoading: documentIsLoading,
-    isError: documentIsError,
-    error: documentError,
-  } = useSupplierDocumentData(supplierId);
+
+  const document = {
+    data: queryClient.getQueryData(["documentData", parseInt(supplierId)]),
+  };
 
   const onSubmit = async (data) => {
     const supplierPayload = {
@@ -71,7 +69,7 @@ function EditSupplierForm(props) {
         payload: supplierPayload,
       });
       try {
-        // validate the document payload 
+        // validate the document payload
         const documentPayload = {};
         if (data.isoDocument && data.isoDocument[0]) {
           documentPayload.isoDocument = data.isoDocument[0];
@@ -86,9 +84,8 @@ function EditSupplierForm(props) {
         editSupplierDocument({
           token: token(),
           supplierId: supplierId,
-          payload: documentPayload
-        })
-
+          payload: documentPayload,
+        });
       } catch (validationError) {
         setError(validationError.errors);
       }
@@ -102,11 +99,24 @@ function EditSupplierForm(props) {
     formState: { errors },
   } = useForm();
 
+  if (editSupplierIsSuccess) {
+    // navigate to the table if the mutation sucess
+    return (
+      <div>
+        <BackButton />
+        sucess
+      </div>
+    );
+  }
   // docment will loading because of the api issue
-  if (supplierIsLoading || documentIsLoading || editSupplierIsLoading || editSupplierDocumentIsLoading) {
+  if (
+    supplierIsLoading ||
+    editSupplierIsLoading ||
+    editSupplierDocumentIsLoading
+  ) {
     return "Is Loading... ";
   }
-  // disini mungkin ada eror dr user dimana kalo dia ga staf ga bisa post 
+
   if (supplierIsError) {
     return `Something Went Wrong, please refresh the page ${supplierError}`;
   }
