@@ -81,5 +81,8 @@ export const useAddIngredientsDocumentData = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("ingredientsDocumentData");
     },
+    onError:() => {
+      queryClient.invalidateQueries("ingredientsDocumentData");
+    },
   });
 };

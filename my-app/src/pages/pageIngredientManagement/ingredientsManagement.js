@@ -2,181 +2,12 @@ import { useSuppliersData } from "../query/useSuppliersData";
 import { useGetIngredientsData } from "../query/useIngredientsData";
 import { useState, useMemo } from "react";
 import IngredientTables from "../tables/IngredientTables";
-import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
 import AddIngredientForm from "../forms/addIngredientForm";
-import { FaFilePdf } from "react-icons/fa";
 import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
+import { Link } from "react-router-dom";
 
 function IngredientManagement() {
   const [ingredientTable, setIngredientTable] = useState(<div> </div>);
-
-  // ada bug di filtering yang object dan is used
-  const COLUMNS = useMemo(
-    () => [
-      {
-        Header: "Ingredient Name",
-        accessor: "name",
-        Filter: ColumnFilter,
-      },
-      {
-        Header: "Price ($)",
-        accessor: "price",
-        Filter: ColumnFilter,
-      },
-      {
-        Header: "Quantity",
-        accessor: "quantity",
-        Filter: ColumnFilter,
-      },
-      {
-        Header: "Unit",
-        accessor: "unit",
-        Cell: ({ value }) => {
-          return value.abbreviation;
-        },
-        Filter: ColumnFilter,
-        filter: (row, columnIds, filterValue) => {
-          return row.filter((row) =>
-            row.values.unit.abbreviation.includes(filterValue)
-          );
-        },
-      },
-      {
-        Header: "Function",
-        accessor: "function",
-        Cell: ({ value }) => {
-          return value.name;
-        },
-        Filter: ColumnFilter,
-        filter: (row, columnIds, filterValue) => {
-          return row.filter((row) =>
-            row.values.function.name.includes(filterValue)
-          );
-        },
-      },
-      {
-        Header: "Is Used",
-        accessor: "is_used",
-        Cell: ({ value }) =>
-          value ? (
-            <div className="d-flex align-items-center justify-content-center h-100 bg-success">
-              <span className="text-center text-white">Used</span>
-            </div>
-          ) : (
-            <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
-              <span className="text-center text-white">Not Used </span>
-            </div>
-          ),
-        Filter: isUsedFilter,
-      },
-      // {
-      //   Header: "Edit",
-      //   accessor: "id",
-      //   Cell: ({ value }) => {
-      //     return (
-      //       <div>
-      //         <Link to={`/ingredient-management/edit/${value}`}>
-      //           <FaEdit style={{ marginRight: "0.5rem" }} />
-      //         </Link>
-      //       </div>
-      //     );
-      //   },
-      //   Filter: ColumnFilter,
-      //   disableFilters: true,
-      // },
-      {
-        Header: "Documents",
-        columns: [
-          {
-            Header: "ISO",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "isoDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-          {
-            Header: "GMO",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "gmoDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-          {
-            Header: "Kosher",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "kosherDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-          {
-            Header: "Halal",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "halalDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-          {
-            Header: "MSDS",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "msdsDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-          {
-            Header: "COA",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "coaDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-          {
-            Header: "Allergen",
-            Filter: ColumnFilter,
-            disableFilters: true,
-            accessor: "allergenDocument",
-            Cell: ({ value }) =>
-              value ? (
-                <a href={value} target="_blank">
-                  <FaFilePdf />
-                </a>
-              ) : null,
-          },
-        ],
-      },
-    ],
-    []
-  );
-
   const {
     isLoading: suppliersIsLoading,
     error: suppliersError,
@@ -255,12 +86,6 @@ function IngredientManagement() {
       }
     });
 
-
-
-
-    
-
-
     if (ingredientData.length === 0) {
       setIngredientTable(
         <>
@@ -272,7 +97,7 @@ function IngredientManagement() {
       setIngredientTable(
         <>
           <AddIngredientForm supplierId={supplierId} />
-          <IngredientTables columns={COLUMNS} data={ingredientData} />
+          <IngredientTables data={ingredientData} />
         </>
       );
     }
@@ -287,9 +112,10 @@ function IngredientManagement() {
               <div
                 className="open-supplier-ingredient"
                 style={{ cursor: "pointer", fontWeight: "bold" }}
-                onClick={handleSupplierClick}
               >
-                {supplier.name}
+                <Link to={`/ingredient-management/supplier=${supplier.id}`}>
+                  {supplier.name}{" "}
+                </Link>
               </div>
               <br></br>
             </li>

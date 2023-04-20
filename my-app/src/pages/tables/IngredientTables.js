@@ -10,7 +10,172 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { GlobalFilter } from "./Filter/globalFilter";
 import { Checkbox } from "./checkbox/checkbox";
-import AddIngredientForm from "../forms/addIngredientForm";
+import { FaFilePdf } from "react-icons/fa";
+import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
+
+
+const COLUMNS = [
+    {
+      Header: "Ingredient Name",
+      accessor: "name",
+      Filter: ColumnFilter,
+    },
+    {
+      Header: "Price ($)",
+      accessor: "price",
+      Filter: ColumnFilter,
+    },
+    {
+      Header: "Quantity",
+      accessor: "quantity",
+      Filter: ColumnFilter,
+    },
+    {
+      Header: "Unit",
+      accessor: "unit",
+      Cell: ({ value }) => {
+        return value.abbreviation;
+      },
+      Filter: ColumnFilter,
+      filter: (row, columnIds, filterValue) => {
+        return row.filter((row) =>
+          row.values.unit.abbreviation.includes(filterValue)
+        );
+      },
+    },
+    {
+      Header: "Function",
+      accessor: "function",
+      Cell: ({ value }) => {
+        return value.name;
+      },
+      Filter: ColumnFilter,
+      filter: (row, columnIds, filterValue) => {
+        return row.filter((row) =>
+          row.values.function.name.includes(filterValue)
+        );
+      },
+    },
+    {
+      Header: "Is Used",
+      accessor: "is_used",
+      Cell: ({ value }) =>
+        value ? (
+          <div className="d-flex align-items-center justify-content-center h-100 bg-success">
+            <span className="text-center text-white">Used</span>
+          </div>
+        ) : (
+          <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
+            <span className="text-center text-white">Not Used </span>
+          </div>
+        ),
+      Filter: isUsedFilter,
+    },
+    // {
+    //   Header: "Edit",
+    //   accessor: "id",
+    //   Cell: ({ value }) => {
+    //     return (
+    //       <div>
+    //         <Link to={`/ingredient-management/edit/${value}`}>
+    //           <FaEdit style={{ marginRight: "0.5rem" }} />
+    //         </Link>
+    //       </div>
+    //     );
+    //   },
+    //   Filter: ColumnFilter,
+    //   disableFilters: true,
+    // },
+    {
+      Header: "Documents",
+      columns: [
+        {
+          Header: "ISO",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "isoDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+        {
+          Header: "GMO",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "gmoDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+        {
+          Header: "Kosher",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "kosherDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+        {
+          Header: "Halal",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "halalDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+        {
+          Header: "MSDS",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "msdsDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+        {
+          Header: "COA",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "coaDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+        {
+          Header: "Allergen",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "allergenDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
+      ],
+    },
+  ]
 
 const Styles = styled.div`
   padding: 1rem;
@@ -41,11 +206,12 @@ const Styles = styled.div`
   }
 `;
 
-function IngredientTables({ columns, data }) {
+function IngredientTables({data }) {
   const ingredientData = data
+  const column = useMemo(() => COLUMNS, []);
   const tableInstance = useTable(
     {
-      columns: columns,
+      columns: column,
       data: ingredientData,
     },
     useGlobalFilter,

@@ -67,6 +67,9 @@ export const useAddSupplierDocument = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("documentData");
     },
+    onError: () => {
+      queryClient.invalidateQueries("documentData");
+    }
   });
 };
 
