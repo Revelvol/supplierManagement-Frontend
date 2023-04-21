@@ -10,8 +10,12 @@ import {
   useGetIngredientData,
 } from "../query/useIngredientsData";
 import { useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
 
-function EditIngredientForm({ supplierId, ingredientId }) {
+function EditIngredientForm() {
+  const params = useParams();
+  const ingredientId = params.ingredientId;
+  const supplierId = params.supplierId.split("=")[1];
   const queryClient = useQueryClient();
   const token = useAuthHeader();
   const pdfInputLabel = (name) => {
@@ -70,7 +74,7 @@ function EditIngredientForm({ supplierId, ingredientId }) {
 
   const onSubmit = (data) => {
     // add ingredrient and retreive its ingredient id
-    console.log(data)
+    console.log(data);
   };
 
   if (
@@ -92,13 +96,13 @@ function EditIngredientForm({ supplierId, ingredientId }) {
   ) {
     return <div>Error</div>;
   }
-  // register the supplier and token value to the form data set 
+  // register the supplier and token value to the form data set
   register("supplier", { value: supplierId });
   register("token", { value: token() });
 
   return (
     <div>
-      Edit Ingredient 
+      Edit Ingredient
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} placeholder="Ingredient Name" />
         {errors.name && <span>{errors.name.message}</span>}
