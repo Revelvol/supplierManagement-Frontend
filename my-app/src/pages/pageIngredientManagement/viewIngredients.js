@@ -4,9 +4,11 @@ import { useGetIngredientsData } from "../query/useIngredientsData";
 import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
 import IngredientTables from "../tables/IngredientTables";
 import AddIngredientForm from "../forms/addIngredientForm";
+import { useState } from "react";
 
 function ViewIngredients() {
   const { supplierId } = useParams();
+  const [showAdd, setShowAdd ] = useState(false)
   const id = supplierId.split("=")[1];
   const {
     isLoading: ingredientsIsLoading,
@@ -15,7 +17,9 @@ function ViewIngredients() {
   } = useGetIngredientsData();
 
   const documentQueries = useGetIngredientsDocumentsData(ingredientsData);
-
+  const handleSubmit = () => {
+    setShowAdd(false);
+  }
   const ingredientsWithDocumentData = ingredientsData?.data.map(
     /* map ingredient with document data */
     (ingredient) => {
@@ -51,6 +55,10 @@ function ViewIngredients() {
   return (
     <>
       <BackButton />
+      <div className="add-ingredient">
+        {showAdd ? <button onClick={() => setShowAdd(false)}>Cancel</button> : <button onClick={() => {setShowAdd(true)}}>Add Ingredient</button>}
+        {showAdd && <AddIngredientForm supplierId={id} setShow={handleSubmit} />}
+      </div>
       <IngredientTables data={ingredientData} />
     </>
   );

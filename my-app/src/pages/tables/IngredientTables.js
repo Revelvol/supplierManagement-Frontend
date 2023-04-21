@@ -173,6 +173,18 @@ const COLUMNS = [
               </a>
             ) : null,
         },
+        {
+          Header: "TDS",
+          Filter: ColumnFilter,
+          disableFilters: true,
+          accessor: "tdsDocument",
+          Cell: ({ value }) =>
+            value ? (
+              <a href={value} target="_blank">
+                <FaFilePdf />
+              </a>
+            ) : null,
+        },
       ],
     },
   ]
@@ -218,25 +230,25 @@ function IngredientTables({data }) {
     useFilters,
     useSortBy,
     usePagination,
-    useRowSelect,
+    // useRowSelect,
    
     // row selection function
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        {
-          id: "selection",
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <Checkbox {...getToggleAllRowsSelectedProps()} />
-          ),
-          Cell: ({ row }) => (
-            <div>
-              <Checkbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ]);
-    }
+    // (hooks) => {
+    //   hooks.visibleColumns.push((columns) => [
+    //     {
+    //       id: "selection",
+    //       Header: ({ getToggleAllRowsSelectedProps }) => (
+    //         <Checkbox {...getToggleAllRowsSelectedProps()} />
+    //       ),
+    //       Cell: ({ row }) => (
+    //         <div>
+    //           <Checkbox {...row.getToggleRowSelectedProps()} />
+    //         </div>
+    //       ),
+    //     },
+    //     ...columns,
+    //   ]);
+    // }
   );
 
   const {
@@ -254,16 +266,11 @@ function IngredientTables({data }) {
     pageCount,
     setPageSize,
     state,
-    selectedFlatRows,
+    // selectedFlatRows,
     setGlobalFilter,
   } = tableInstance;
-
-  /*selected rows are selected in the selectedFlatRows, might want  to json stringtify first)
-  di original nya 
-  */
-
+  
   const { pageIndex, globalFilter,  pageSize } = state;
-  // pop the function and unit data karena itu another object within object
   return (
     <div>
       <div className="global-filter-container">

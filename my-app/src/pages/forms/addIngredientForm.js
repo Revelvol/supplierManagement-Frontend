@@ -7,7 +7,7 @@ import { useAuthHeader } from "react-auth-kit";
 import { useAddIngredientData } from "../query/useIngredientsData";
 import { useAddIngredientsDocumentData } from "../query/useIngredientsDocumentData";
 
-function AddIngredientForm({ supplierId }) {
+function AddIngredientForm({ supplierId, setShow }) {
   const token = useAuthHeader();
   const pdfInputLabel = (name) => {
     /* helper function to put document jsx label  */
@@ -23,7 +23,6 @@ function AddIngredientForm({ supplierId }) {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(INGREDIENT_SCHEMA),
   });
@@ -51,24 +50,30 @@ function AddIngredientForm({ supplierId }) {
     error: addIngredientDocumentError,
   } = useAddIngredientsDocumentData();
 
-  const functionsOption = functionsData?.data
-  const unitsOption = unitsData?.data
+  const functionsOption = functionsData?.data;
+  const unitsOption = unitsData?.data;
 
   const onSubmit = (data) => {
     // add ingredrient and retreive its ingredient id
+    if (setShow) {
+      setShow();
+    }
     addIngredient(
       { data: data },
       {
         onSuccess: (res) => {
-          const ingredientId = res.data.id
-          // add ingredient document ERRROR 
-          addIngredientDocument({data:data, id:ingredientId}, {
-            onSuccess: (res) => {console.log(res.data)}
-          })
+          const ingredientId = res.data.id;
+          addIngredientDocument(
+            { data: data, id: ingredientId },
+            {
+              onSuccess: (res) => {
+                // if there is setShow component, set it to false
+              },
+            }
+          );
         },
       }
     );
-
   };
 
   if (
