@@ -15,6 +15,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import IngredientManagement from "./pages/pageIngredientManagement/ingredientsManagement";
 
 import ViewIngredients from "./pages/pageIngredientManagement/viewIngredients";
+import EditIngredient from "./pages/pageIngredientManagement/editIngredient";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,10 @@ function App() {
           <Route
             path="/ingredient-management/:supplierId"
             element={<ViewIngredients />}
+          />
+          <Route
+            path="/ingredient-management/edit/:ingredientId"
+            element={<EditIngredient />}
           />
         </Route>
       </Routes>

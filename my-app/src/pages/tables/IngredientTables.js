@@ -9,9 +9,9 @@ import {
 import styled from "styled-components";
 import { useMemo } from "react";
 import { GlobalFilter } from "./Filter/globalFilter";
-import { Checkbox } from "./checkbox/checkbox";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaEdit } from "react-icons/fa";
 import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
+import { Link } from "react-router-dom";
 
 
 const COLUMNS = [
@@ -71,21 +71,21 @@ const COLUMNS = [
         ),
       Filter: isUsedFilter,
     },
-    // {
-    //   Header: "Edit",
-    //   accessor: "id",
-    //   Cell: ({ value }) => {
-    //     return (
-    //       <div>
-    //         <Link to={`/ingredient-management/edit/${value}`}>
-    //           <FaEdit style={{ marginRight: "0.5rem" }} />
-    //         </Link>
-    //       </div>
-    //     );
-    //   },
-    //   Filter: ColumnFilter,
-    //   disableFilters: true,
-    // },
+    {
+      Header: "Edit",
+      accessor: "id",
+      Cell: ({ value }) => {
+        return (
+          <div>
+            <Link to={`/ingredient-management/edit/${value}`}>
+              <FaEdit style={{ marginRight: "0.5rem" }} />
+            </Link>
+          </div>
+        );
+      },
+      Filter: ColumnFilter,
+      disableFilters: true,
+    },
     {
       Header: "Documents",
       columns: [
