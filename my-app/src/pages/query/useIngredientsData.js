@@ -8,7 +8,14 @@ const fetchIngredientsData = () => {
   );
 };
 
-const putIngredientData = ({ data, id}) => { 
+const fetchIngredientData = ({ queryKey }) => {
+  const id = queryKey[1];
+  return axios.get(
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/`
+  );
+};
+
+const putIngredientData = ({ data, id }) => {
   /* axios request to put ingredient data */
   const payload = {
     supplier: data.supplier,
@@ -58,6 +65,27 @@ export const useGetIngredientsData = () => {
   const queryKey = "ingredientsData";
   const queryFn = fetchIngredientsData;
   return useQuery(queryKey, queryFn);
+};
+
+export const useGetIngredientData = (ingredientId) => {
+  /* usequeryhook to get individual ingredients */
+  const queryClient = useQueryClient();
+  const queryKey = ["ingredientData", ingredientId];
+  const queryFn = fetchIngredientData;
+  return useQuery(queryKey, queryFn, {
+    initialData: () => {
+      const ingredient = queryClient
+        .getQueriesData("ingredientsData")
+        ?.data?.find((ingredient) => ingredient.id === parseInt(ingredientId));
+      if (ingredient) {
+        return {
+          data: ingredient,
+        };
+      } else {
+        return undefined;
+      }
+    },
+  });
 };
 
 export const useAddIngredientData = () => {
