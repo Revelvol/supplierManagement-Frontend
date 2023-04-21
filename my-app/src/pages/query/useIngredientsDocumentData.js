@@ -33,6 +33,7 @@ function buildFormData(data) {
 }
 
 const addIngredientDocumentData = ({ data, id }) => {
+  /* axios request to add document data */
   const formData = buildFormData(data);
   const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/upload-document/`;
 
@@ -59,6 +60,17 @@ const addIngredientDocumentData = ({ data, id }) => {
       });
     });
 };
+
+const patchIngredientsDocumentData = ({data, id}) => {
+  /* axios request to patch ingredient document Data  */
+  const formData = buildFormData(data);
+  const url = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/upload-document/`
+  return axios.patch(url,formData,{
+    headers:{
+      Authorization: data.token,
+    }
+  })
+}
 
 export const useGetIngredientsDocumentsData = (ingredientData) => {
   /* usequery hook get document ingredient data 
@@ -91,6 +103,19 @@ export const useAddIngredientsDocumentData = () => {
           typeof queryKey[1] === "number"
         );
       });
+    },
+  });
+};
+
+export const usePatchIngredientsDocumentData = (ingredientId) => {
+  /* use query hook to patch ingredient document data  */
+  const queryClient = useQueryClient();
+  return useMutation(patchIngredientsDocumentData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        "ingredientDocumentData",
+        parseInt(ingredientId),
+      ]);
     },
   });
 };
