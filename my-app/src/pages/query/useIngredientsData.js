@@ -70,7 +70,7 @@ export const useGetIngredientsData = () => {
 export const useGetIngredientData = (ingredientId) => {
   /* usequeryhook to get individual ingredients */
   const queryClient = useQueryClient();
-  const queryKey = ["ingredientData", ingredientId];
+  const queryKey = ["ingredientData", parseInt(ingredientId)];
   const queryFn = fetchIngredientData;
   return useQuery(queryKey, queryFn, {
     initialData: () => {

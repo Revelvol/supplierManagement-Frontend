@@ -51,7 +51,7 @@ function App() {
             element={<ViewIngredients />}
           />
           <Route
-            path="/ingredient-management/edit/:ingredientId"
+            path="/ingredient-management/:supplierId/edit/:ingredientId"
             element={<EditIngredient />}
           />
         </Route>

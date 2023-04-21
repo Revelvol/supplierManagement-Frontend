@@ -4,10 +4,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 import { useAuthHeader } from "react-auth-kit";
-import { useAddIngredientData } from "../query/useIngredientsData";
-import { useAddIngredientsDocumentData } from "../query/useIngredientsDocumentData";
+import { usePatchIngredientsDocumentData } from "../query/useIngredientsDocumentData";
+import {
+  usePutIngredientData,
+  useGetIngredientData,
+} from "../query/useIngredientsData";
+import { useQueryClient } from "react-query";
 
-function EditIngredientForm({ supplierId}) {
+function EditIngredientForm({ supplierId, ingredientId }) {
+  const queryClient = useQueryClient();
   const token = useAuthHeader();
   const pdfInputLabel = (name) => {
     /* helper function to put document jsx label  */
@@ -39,42 +44,61 @@ function EditIngredientForm({ supplierId}) {
   } = useGetUnitsData();
 
   const {
-    mutate: addIngredient,
-    isLoading: addIngredientIsLoading,
-    error: addIngredientError,
-  } = useAddIngredientData();
+    isLoading: ingredientIsLoading,
+    data: ingredientData,
+    error: ingredientError,
+  } = useGetIngredientData(ingredientId);
 
-  const {
-    mutate: addIngredientDocument,
-    isLoading: addIngredientDocumentIsLoading,
-    error: addIngredientDocumentError,
-  } = useAddIngredientsDocumentData();
+  const document = {
+    data: queryClient.getQueryData(["documentData", parseInt(ingredientId)]),
+  };
 
   const functionsOption = functionsData?.data;
   const unitsOption = unitsData?.data;
 
+  const {
+    mutate: putIngredient,
+    isLoading: putIngredientIsLoading,
+    error: putIngredientError,
+  } = usePutIngredientData();
+
+  const {
+    mutate: patchIngredientDocument,
+    isLoading: patchIngredientIsLoading,
+    error: patchIngredientError,
+  } = usePatchIngredientsDocumentData();
+
   const onSubmit = (data) => {
     // add ingredrient and retreive its ingredient id
-    
+    console.log(data)
   };
 
   if (
     functionsIsLoading ||
     unitsIsLoading ||
-    addIngredientDocumentIsLoading ||
-    addIngredientIsLoading
+    putIngredientIsLoading ||
+    patchIngredientIsLoading ||
+    ingredientIsLoading
   ) {
     return <div>Loading...</div>;
   }
 
-  if (functionsError || unitsError || addIngredientDocumentError) {
+  if (
+    functionsError ||
+    unitsError ||
+    putIngredientError ||
+    patchIngredientError ||
+    ingredientError
+  ) {
     return <div>Error</div>;
   }
+  // register the supplier and token value to the form data set 
   register("supplier", { value: supplierId });
   register("token", { value: token() });
+
   return (
     <div>
-      Add Ingredient
+      Edit Ingredient 
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} placeholder="Ingredient Name" />
         {errors.name && <span>{errors.name.message}</span>}
