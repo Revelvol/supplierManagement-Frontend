@@ -54,20 +54,19 @@ function AddIngredientForm({ supplierId, setShow }) {
   const unitsOption = unitsData?.data;
 
   const onSubmit = (data) => {
-    // add ingredrient and retreive its ingredient id
-    if (setShow) {
-      setShow();
-    }
     addIngredient(
       { data: data },
       {
         onSuccess: (res) => {
-          const ingredientId = res.data.id;
           addIngredientDocument(
-            { data: data, id: ingredientId },
+            { data: data, id: res.data.id },
             {
-              onSuccess: (res) => {
-                // if there is setShow component, set it to false
+              onSettled: (res) => {
+                // bug the code wont reach here 
+                console.log("test the code reach here ");
+                if (setShow) {
+                  setShow();
+                }
               },
             }
           );
