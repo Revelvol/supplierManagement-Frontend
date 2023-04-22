@@ -2,6 +2,7 @@ import { useTable, useSortBy } from "react-table";
 import styled from "styled-components";
 import { FaFilePdf, FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -35,6 +36,8 @@ const Styles = styled.div`
 MIGHT ALSO LOOK INTO PAGINATED QUERIES FOR PAGE, tapi kayaknya mesti configure di backend juga
 ASLO USE THE KEEP PREVIOUS DATA TO TRUE BIAR GA LOADING TERUS */
 function SupplierTables({ columns, data }) {
+
+  data = useMemo(()=> data, [])
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,

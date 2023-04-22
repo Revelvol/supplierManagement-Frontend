@@ -1,11 +1,18 @@
 // import react table here
 
-import SupplierTables from "./tables/supplierTables";
+import SupplierTables from "../tables/supplierTables";
+import { useState } from "react";
 import React from "react";
-import AddSupplierForm from "./forms/addSupplierForm";
-import { useDocumentQueries, useSuppliersData } from "./query/useSuppliersData";
+import AddSupplierForm from "../forms/addSupplierForm";
+import { useDocumentQueries, useSuppliersData } from "../query/useSuppliersData";
+
 
 function SupplierManagement() {
+  const [hideAddSupplier, setHideAddSupplier] = useState(true)
+
+  const handleUnhideAddSupplier = () => {
+    setHideAddSupplier(!hideAddSupplier);
+  }
   const columns = React.useMemo(
     () => [
       // {
@@ -15,6 +22,7 @@ function SupplierManagement() {
       {
         Header: "Name",
         accessor: "name", // accessor is the "key" in the data
+      
       },
       {
         Header: "Location",
@@ -48,7 +56,7 @@ function SupplierManagement() {
     ],
     []
   );
-  // fetch suplier data  (working fine )
+  
   const {
     isLoading: supplierLoading,
     error: supplierError,
@@ -89,7 +97,12 @@ function SupplierManagement() {
     <div>
       supplier Management
       <br></br>
-      <AddSupplierForm />
+      {
+        hideAddSupplier=== true? <button onClick={handleUnhideAddSupplier}>Add Supplier </button>: ""} 
+      
+      {
+        hideAddSupplier === false ? <AddSupplierForm /> : ""
+      }
       <SupplierTables columns={columns} data={suppliersWithDocumentData} />
     </div>
   );

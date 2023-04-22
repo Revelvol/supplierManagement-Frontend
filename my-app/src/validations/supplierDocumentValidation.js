@@ -1,4 +1,4 @@
-import { object, string, mixed } from "yup";
+import { object, mixed } from "yup";
 
 const supplierDocumentSchema = object({
     isoDocument: mixed()

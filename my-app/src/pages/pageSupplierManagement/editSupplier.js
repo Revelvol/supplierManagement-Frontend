@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import EditSupplierForm from "./forms/editSupplierForm";
+import EditSupplierForm from "../forms/editSupplierForm";
 
 function EditSupplier() {
   // implement query by id here
