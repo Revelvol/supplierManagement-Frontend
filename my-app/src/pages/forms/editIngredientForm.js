@@ -1,6 +1,6 @@
 import { useGetFunctionsData } from "../query/useFunctionsData";
 import { useGetUnitsData } from "../query/useUnitsData";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 import { useAuthHeader } from "react-auth-kit";
@@ -13,8 +13,10 @@ import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { FaFilePdf } from "react-icons/fa";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function EditIngredientForm() {
+  const navigate = useNavigate()
   const params = useParams();
   const ingredientId = params.ingredientId;
   const supplierId = params.supplierId.split("=")[1];
@@ -81,11 +83,29 @@ function EditIngredientForm() {
 
   const onSubmit = (data) => {
     // add ingredrient and retreive its ingredient id
-    console.log(data);
+  
+
+    /* edit ingredient and the document based 
+    on the data  */
+    putIngredient(
+      { data: data, id: ingredientId },
+      {
+        onSuccess: (res) => {
+          patchIngredientDocument(
+            { data: data, id: ingredientId },
+            {
+              onSuccess: (res) => {
+                navigate(-1)
+              },
+            }
+          );
+        },
+      }
+    );
   };
 
   const pdfInputLabel = (name) => {
-   /*  conditional jsx to render edit  
+    /*  conditional jsx to render edit  
    button if there is document link yet  */
     return document.data[name] !== null ? (
       <>
@@ -96,7 +116,7 @@ function EditIngredientForm() {
         {!editDocument[name] ? (
           <button
             onClick={(e) => {
-              e.preventDefault()
+              e.preventDefault();
               setEditDocument({
                 ...editDocument,
                 [name]: !editDocument[name],
@@ -107,18 +127,21 @@ function EditIngredientForm() {
             Edit{" "}
           </button>
         ) : (
-          <button
-            onClick={(e) => {
-              e.preventDefault()
-              setEditDocument({
-                ...editDocument,
-                [name]: !editDocument[name],
-              });
-            }}
-          >
-            {" "}
-            Cancel{" "}
-          </button>
+          ""
+          /* need to add logic if the cancel button is clicked
+          dont send the file  */
+          // <button
+          //   onClick={(e) => {
+          //     e.preventDefault();
+          //     setEditDocument({
+          //       ...editDocument,
+          //       [name]: !editDocument[name],
+          //     });
+          //   }}
+          // >
+          //   {" "}
+          //   Cancel{" "}
+          // </button>
         )}
 
         <div style={{ display: editDocument[name] ? "block" : "none" }}>
@@ -162,15 +185,31 @@ function EditIngredientForm() {
     <div>
       Edit Ingredient
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("name")} placeholder="Ingredient Name" />
+        <input
+          {...register("name")}
+          placeholder="Ingredient Name"
+          defaultValue={ingredientData?.data.name}
+        />
         {errors.name && <span>{errors.name.message}</span>}
         <br></br>
-        <input {...register("price")} placeholder="Price($)" />
+        <input
+          {...register("price")}
+          placeholder="Price($)"
+          defaultValue={ingredientData?.data.price}
+        />
         {errors.price && <span>{errors.price.message}</span>}
         <br></br>
-        <input {...register("quantity")} placeholder="Quantity" />
+        <input
+          {...register("quantity")}
+          placeholder="Quantity"
+          defaultValue={ingredientData?.data.quantity}
+        />
 
-        <select {...register("unit")} placeholder="unit">
+        <select
+          {...register("unit")}
+          placeholder="unit"
+          defaultValue={JSON.stringify(ingredientData?.data.unit)}
+        >
           {unitsOption.map((option) => (
             <option key={option.id} value={JSON.stringify(option)}>
               {option.abbreviation}
@@ -180,7 +219,11 @@ function EditIngredientForm() {
         {errors.quantity && <span>{errors.quantity.message}</span>}
         <br></br>
         {errors.unit && <span>{errors.unit.message}</span>}
-        <select {...register("function")} placeholder="function">
+        <select
+          {...register("function")}
+          placeholder="function"
+          defaultValue={JSON.stringify(ingredientData?.data.function)}
+        >
           {functionsOption.map((option) => (
             <option key={option.id} value={JSON.stringify(option)}>
               {option.name}
@@ -189,7 +232,10 @@ function EditIngredientForm() {
         </select>
         <br></br>
         {errors.function && <span>{errors.function.message}</span>}
-        <select {...register("is_used")} defaultValue="">
+        <select
+          {...register("is_used")}
+          defaultValue={ingredientData?.data.is_used}
+        >
           <option value="true">used</option>
           <option value="false">not used </option>
         </select>
