@@ -1,6 +1,6 @@
 import { useGetFunctionsData } from "../query/useFunctionsData";
 import { useGetUnitsData } from "../query/useUnitsData";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 import { useAuthHeader } from "react-auth-kit";
@@ -11,6 +11,8 @@ import {
 } from "../query/useIngredientsData";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
+import { FaFilePdf } from "react-icons/fa";
+import { useState } from "react";
 
 function EditIngredientForm() {
   const params = useParams();
@@ -18,16 +20,17 @@ function EditIngredientForm() {
   const supplierId = params.supplierId.split("=")[1];
   const queryClient = useQueryClient();
   const token = useAuthHeader();
-  const pdfInputLabel = (name) => {
-    /* helper function to put document jsx label  */
-    return (
-      <div>
-        <label htmlFor={name}>{name}</label>
-        <input type="file" {...register(name)} accept="application/pdf" />
-        {errors[name] && <span>{errors[name].message}</span>}
-      </div>
-    );
-  };
+  const [editDocument, setEditDocument] = useState({
+    isoDocument: false,
+    gmoDocument: false,
+    kosherDocument: false,
+    halalDocument: false,
+    msdsDocument: false,
+    tdsDocument: false,
+    coaDocument: false,
+    allergenDocument: false,
+  });
+
   const {
     register,
     handleSubmit,
@@ -41,6 +44,7 @@ function EditIngredientForm() {
     error: functionsError,
     data: functionsData,
   } = useGetFunctionsData();
+
   const {
     isLoading: unitsIsLoading,
     error: unitsError,
@@ -54,7 +58,10 @@ function EditIngredientForm() {
   } = useGetIngredientData(ingredientId);
 
   const document = {
-    data: queryClient.getQueryData(["documentData", parseInt(ingredientId)]),
+    data: queryClient.getQueryData([
+      "ingredientDocumentData",
+      parseInt(ingredientId),
+    ]),
   };
 
   const functionsOption = functionsData?.data;
@@ -75,6 +82,57 @@ function EditIngredientForm() {
   const onSubmit = (data) => {
     // add ingredrient and retreive its ingredient id
     console.log(data);
+  };
+
+  const pdfInputLabel = (name) => {
+   /*  conditional jsx to render edit  
+   button if there is document link yet  */
+    return document.data[name] !== null ? (
+      <>
+        <label htmlFor={name}>{name}</label>
+        <a href={document.data[name]} target="_blank" rel="noopener noreferrer">
+          <FaFilePdf />
+        </a>
+        {!editDocument[name] ? (
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              setEditDocument({
+                ...editDocument,
+                [name]: !editDocument[name],
+              });
+            }}
+          >
+            {" "}
+            Edit{" "}
+          </button>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              setEditDocument({
+                ...editDocument,
+                [name]: !editDocument[name],
+              });
+            }}
+          >
+            {" "}
+            Cancel{" "}
+          </button>
+        )}
+
+        <div style={{ display: editDocument[name] ? "block" : "none" }}>
+          <input type="file" {...register(name)} accept="application/pdf" />
+          {errors[name] && <span>{errors[name].message}</span>}
+        </div>
+      </>
+    ) : (
+      <div>
+        <label htmlFor={name}>{name}</label>
+        <input type="file" {...register(name)} accept="application/pdf" />
+        {errors[name] && <span>{errors[name].message}</span>}
+      </div>
+    );
   };
 
   if (
