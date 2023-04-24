@@ -14,9 +14,11 @@ import { useParams } from "react-router-dom";
 import { FaFilePdf } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Title } from "../../components/style";
+import { Button } from "../../components/style";
 
 function EditIngredientForm() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const params = useParams();
   const ingredientId = params.ingredientId;
   const supplierId = params.supplierId.split("=")[1];
@@ -83,7 +85,6 @@ function EditIngredientForm() {
 
   const onSubmit = (data) => {
     // add ingredrient and retreive its ingredient id
-  
 
     /* edit ingredient and the document based 
     on the data  */
@@ -95,7 +96,7 @@ function EditIngredientForm() {
             { data: data, id: ingredientId },
             {
               onSuccess: (res) => {
-                navigate(-1)
+                navigate(-1);
               },
             }
           );
@@ -182,77 +183,94 @@ function EditIngredientForm() {
   register("token", { value: token() });
 
   return (
-    <div>
-      Edit Ingredient
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register("name")}
-          placeholder="Ingredient Name"
-          defaultValue={ingredientData?.data.name}
-        />
-        {errors.name && <span>{errors.name.message}</span>}
-        <br></br>
-        <input
-          {...register("price")}
-          placeholder="Price($)"
-          defaultValue={ingredientData?.data.price}
-        />
-        {errors.price && <span>{errors.price.message}</span>}
-        <br></br>
-        <input
-          {...register("quantity")}
-          placeholder="Quantity"
-          defaultValue={ingredientData?.data.quantity}
-        />
+    <div className="row">
+      <div className="col-12 text-center">
+        <Title> Edit Ingredient </Title>
+      </div>
 
-        <select
-          {...register("unit")}
-          placeholder="unit"
-          defaultValue={JSON.stringify(ingredientData?.data.unit)}
-        >
-          {unitsOption.map((option) => (
-            <option key={option.id} value={JSON.stringify(option)}>
-              {option.abbreviation}
-            </option>
-          ))}
-        </select>
-        {errors.quantity && <span>{errors.quantity.message}</span>}
-        <br></br>
-        {errors.unit && <span>{errors.unit.message}</span>}
-        <select
-          {...register("function")}
-          placeholder="function"
-          defaultValue={JSON.stringify(ingredientData?.data.function)}
-        >
-          {functionsOption.map((option) => (
-            <option key={option.id} value={JSON.stringify(option)}>
-              {option.name}
-            </option>
-          ))}
-        </select>
-        <br></br>
-        {errors.function && <span>{errors.function.message}</span>}
-        <select
-          {...register("is_used")}
-          defaultValue={ingredientData?.data.is_used}
-        >
-          <option value="true">used</option>
-          <option value="false">not used </option>
-        </select>
-        <br></br>
-        {errors.is_used && <span>{errors.is_used.message}</span>}
-        <br></br>
-        {pdfInputLabel("isoDocument")}
-        {pdfInputLabel("gmoDocument")}
-        {pdfInputLabel("kosherDocument")}
-        {pdfInputLabel("halalDocument")}
-        {pdfInputLabel("msdsDocument")}
-        {pdfInputLabel("tdsDocument")}
-        {pdfInputLabel("coaDocument")}
-        {pdfInputLabel("allergenDocument")}
+      <div className="col-12">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="row">
+            <div className="col-6">
+              <label> Name : </label>
+              <input
+                {...register("name")}
+                placeholder="Ingredient Name"
+                defaultValue={ingredientData?.data.name}
+              />
+              {errors.name && <span>{errors.name.message}</span>}
+              <br></br>
+              <label> Name : </label>
+              <input
+                {...register("price")}
+                placeholder="Price($)"
+                defaultValue={ingredientData?.data.price}
+              />
+              {errors.price && <span>{errors.price.message}</span>}
+              <br></br>
+              <label> Price : </label>
+              <input
+                {...register("quantity")}
+                placeholder="Quantity"
+                defaultValue={ingredientData?.data.quantity}
+              />
+               <label> Unit : </label>
+              <select
+                {...register("unit")}
+                placeholder="unit"
+                defaultValue={JSON.stringify(ingredientData?.data.unit)}
+              >
+                {unitsOption.map((option) => (
+                  <option key={option.id} value={JSON.stringify(option)}>
+                    {option.abbreviation}
+                  </option>
+                ))}
+              </select>
+              {errors.quantity && <span>{errors.quantity.message}</span>}
+              <br></br>
+              {errors.unit && <span>{errors.unit.message}</span>}
+              <label> Function : </label>
+              <select
+                {...register("function")}
+                placeholder="function"
+                defaultValue={JSON.stringify(ingredientData?.data.function)}
+              >
+                {functionsOption.map((option) => (
+                  <option key={option.id} value={JSON.stringify(option)}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+              <br></br>
+              {errors.function && <span>{errors.function.message}</span>}
+              <label> Is used: </label>
+              <select
+                {...register("is_used")}
+                defaultValue={ingredientData?.data.is_used}
+              >
+                <option value="true">used</option>
+                <option value="false">not used </option>
+              </select>
+              <br></br>
+              {errors.is_used && <span>{errors.is_used.message}</span>}
+              <br></br>
+            </div>
+            <div className="col-6">
+              {pdfInputLabel("isoDocument")}
+              {pdfInputLabel("gmoDocument")}
+              {pdfInputLabel("kosherDocument")}
+              {pdfInputLabel("halalDocument")}
+              {pdfInputLabel("msdsDocument")}
+              {pdfInputLabel("tdsDocument")}
+              {pdfInputLabel("coaDocument")}
+              {pdfInputLabel("allergenDocument")}
 
-        <button type="submit">Submit</button>
-      </form>
+              <Button className="text-center" type="submit">Submit</Button>
+            </div>
+            
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

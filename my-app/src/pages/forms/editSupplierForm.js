@@ -12,9 +12,11 @@ import BackButton from "../../components/backButton";
 
 import { useQueryClient } from "react-query";
 import { useSuppliersData } from "../query/useSuppliersData";
-import { FormContainer, InputField, InputLabel } from "../../components/style";
+import { Button } from "../../components/style";
+import { useNavigate } from "react-router-dom";
 
 function EditSupplierForm(props) {
+  const navigate = useNavigate()
   const queryClient = useQueryClient();
   useSuppliersData();
   const [showIso, setShowIso] = useState(false);
@@ -98,12 +100,7 @@ function EditSupplierForm(props) {
 
   if (editSupplierIsSuccess) {
     // navigate to the table if the mutation sucess
-    return (
-      <div>
-        <BackButton />
-        sucess
-      </div>
-    );
+    navigate("/supplier-management")
   }
   // docment will loading because of the api issue
   if (editSupplierIsLoading || editSupplierDocumentIsLoading) {
@@ -113,111 +110,120 @@ function EditSupplierForm(props) {
   return (
     <div>
       <BackButton></BackButton>
-      <FormContainer onSubmit={handleSubmit(onSubmit)}>
-        {error !== "" && <div className="alert alert-danger">{error}</div>}
-        <InputLabel> Name </InputLabel>
-        <InputField
-          defaultValue={`${supplier.data.name}`}
-          {...register("name")}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="row">
+          <div className="col-6">
+            {error !== "" && <div className="alert alert-danger">{error}</div>}
+            <label> Name: </label>
+            <input
+              defaultValue={`${supplier.data.name}`}
+              {...register("name")}
           
-        />
-        <InputLabel> Phone </InputLabel>
-        <InputField
-          defaultValue={`${supplier.data.phone}`}
-          {...register("phone")}
+            />
+            <br></br>
+            <label> Phone: </label>
+            <input
+              defaultValue={`${supplier.data.phone}`}
+              {...register("phone")}
           
-        />
-        <InputLabel> Location </InputLabel>
-        <InputField
-          defaultValue={`${supplier.data.location}`}
-          {...register("location")}
-        />
-        <InputLabel htmlFor="isoDocument">isoDocument</InputLabel>
-        {document && document.data.isoDocument ? (
-          <>
-            <a
-              href={document.data.isoDocument}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaFilePdf />
-            </a>
-            {!showIso ? <button onClick={handleIsoChange}> Edit </button> : ""}
-            <div style={{ display: showGmp ? "block" : "none" }}>
-              <InputField
+            />
+            <br></br>
+            <label> Location: </label>
+            <input
+              defaultValue={`${supplier.data.location}`}
+              {...register("location")}
+            />
+          </div>
+          <div className="col-6">
+            <label htmlFor="isoDocument">isoDocument</label>
+            {document && document.data.isoDocument ? (
+              <>
+                <a
+                  href={document.data.isoDocument}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFilePdf />
+                </a>
+                {!showIso ? <button onClick={handleIsoChange}> Edit </button> : ""}
+                <div style={{ display: showGmp ? "block" : "none" }}>
+                  <input
+                    type="file"
+                    {...register("IsoDocument")}
+                    accept="application/pdf"
+                  />
+                </div>
+              </>
+            ) : (
+              <input
                 type="file"
-                {...register("IsoDocument")}
+                {...register("isoDocument")}
                 accept="application/pdf"
               />
-            </div>
-          </>
-        ) : (
-          <InputField
-            type="file"
-            {...register("isoDocument")}
-            accept="application/pdf"
-          />
-        )}
-        <InputLabel htmlFor="gmpDocument">gmpDocument</InputLabel>
-        {document && document.data.gmpDocument ? (
-          <>
-            <a
-              href={document.data.gmpDocument}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaFilePdf />
-            </a>
-            {!showGmp ? <button onClick={handleGmpChange}> Edit </button> : ""}
-            <div style={{ display: showGmp ? "block" : "none" }}>
+            )}
+            <br></br>
+            <label htmlFor="gmpDocument">gmpDocument</label>
+            {document && document.data.gmpDocument ? (
+              <>
+                <a
+                  href={document.data.gmpDocument}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFilePdf />
+                </a>
+                {!showGmp ? <button onClick={handleGmpChange}> Edit </button> : ""}
+                <div style={{ display: showGmp ? "block" : "none" }}>
+                  <input
+                    type="file"
+                    {...register("gmpDocument")}
+                    accept="application/pdf"
+                  />
+                </div>
+              </>
+            ) : (
               <input
                 type="file"
                 {...register("gmpDocument")}
                 accept="application/pdf"
               />
-            </div>
-          </>
-        ) : (
-          <input
-            type="file"
-            {...register("gmpDocument")}
-            accept="application/pdf"
-          />
-        )}
-        <br></br>
-        <InputLabel htmlFor="haccpDocument">haccpDocument</InputLabel>
-        {document && document.data.haccpDocument ? (
-          <>
-            <a
-              href={document.data.haccpDocument}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaFilePdf />
-            </a>
-            {!showHaccp ? (
-              <button onClick={handleHaccpChange}> Edit </button>
-            ) : (
-              ""
             )}
-            <div style={{ display: showHaccp ? "block" : "none" }}>
+            <br></br>
+            <label htmlFor="haccpDocument">haccpDocument</label>
+            {document && document.data.haccpDocument ? (
+              <>
+                <a
+                  href={document.data.haccpDocument}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFilePdf />
+                </a>
+                {!showHaccp ? (
+                  <button onClick={handleHaccpChange}> Edit </button>
+                ) : (
+                  ""
+                )}
+                <div style={{ display: showHaccp ? "block" : "none" }}>
+                  <input
+                    type="file"
+                    {...register("haccpDocument")}
+                    accept="application/pdf"
+                  />
+                </div>
+              </>
+            ) : (
               <input
                 type="file"
                 {...register("haccpDocument")}
                 accept="application/pdf"
               />
-            </div>
-          </>
-        ) : (
-          <input
-            type="file"
-            {...register("haccpDocument")}
-            accept="application/pdf"
-          />
-        )}
-        <br></br>
-        <input className="" type="submit" />
-      </FormContainer>
+            )}
+            <br></br>
+            <Button type="submit" > Submit </Button>
+          </div>
+        </div>
+      </form>
     </div>
   );
 }

@@ -33,7 +33,7 @@ function SupplierTables({ data }) {
         ],
       },
       {
-        Header: "document",
+        Header: "Documents",
         columns: [
           {
             Header: "ISO",
@@ -68,7 +68,7 @@ function SupplierTables({ data }) {
         ],
       },
       {
-        Header: "utility",
+        Header: "Utility",
         columns: [
           {
             Header: "edit",
@@ -85,7 +85,7 @@ function SupplierTables({ data }) {
     []
   );
 
-  data = useMemo(() => data, []);
+ 
   const {
     getTableProps,
     getTableBodyProps,

@@ -263,7 +263,7 @@ function IngredientTables({ data }) {
             onClick={() => {
               setShowAdd(true);
             }}
-            class="btn btn-info"
+            className="btn btn-info"
           >
             Add Ingredient
           </button>

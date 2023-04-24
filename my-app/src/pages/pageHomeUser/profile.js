@@ -10,7 +10,6 @@ function Profile() {
   const [isEditable, setIsEditable] = useState(false);
   const [name, setName] = useState(auth().name);
   const [email] = useState(auth().email);
-  const [isStaff, setIsStaff] = useState(auth().is_staff);
 
   const handleEditButtonClick = () => {
     setIsEditable(true);
@@ -18,7 +17,12 @@ function Profile() {
 
   const handleSaveButtonClick = async (e) => {
     // Call the patchMeApi function to save the updated profile information
-    const payload = {name, is_staff: isStaff}
+    if (auth().name === "example account 112" && auth().email ==="example123123@example.com") {
+      alert("you cannot change demo account")
+      setIsEditable(false)
+      return 
+    }
+    const payload = {name, is_staff: true}
     const response = await fetch(url, {
         method: 'PATCH',
         headers:{
@@ -54,16 +58,6 @@ function Profile() {
             type="email"
             value={email}
             readOnly
-          />
-        </label>
-        <br />
-        <label>
-          Staff:
-          <input
-            type="checkbox"
-            checked={isStaff}
-            onChange={(e) => setIsStaff(e.target.checked)}
-            disabled={!isEditable}
           />
         </label>
         <br />

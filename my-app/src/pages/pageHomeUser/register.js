@@ -31,7 +31,7 @@ function Register() {
     if (!password) {
       throw new Error("Password Do not Match ");
     }
-    const payload = { name, email, password, is_staff: staff };
+    const payload = { name, email, password, is_staff: true };
     const jsonData = JSON.stringify(payload);
     const response = await fetch(url, {
       method: "POST",
@@ -133,15 +133,7 @@ function Register() {
             required
           />
         </div>
-        <div>
-          <label htmlFor="staff">Staff:</label>
-          <input
-            type="checkbox"
-            id="staff"
-            name="staff"
-            onChange={handleStaffChange}
-          />
-        </div>
+
         <button type="submit" >Register</button>
         <Link to="/login">Login</Link>
       </form>
