@@ -34,27 +34,11 @@ const addSupplierDocument = (data) => {
     documents.append("gmpDocument", data.documents.gmpDocument);
   }
 
-  return axios.get(supplierDocumentUrl, {
-    headers: {
-      Authorization: token,
-    },
-  })
-  .then(response => {
-    // Document already exists, so do a PATCH request
-    return axios.patch(supplierDocumentUrl, documents, {
+  return axios.put(supplierDocumentUrl, documents, {
       headers: {
         Authorization: token,
       },
     });
-  })
-  .catch(error => {
-    // Document doesn't exist, so do a POST request
-    return axios.post(supplierDocumentUrl, documents, {
-      headers: {
-        Authorization: token,
-      },
-    });
-  });
 };
 
 const fetchSuppliersData = () => {

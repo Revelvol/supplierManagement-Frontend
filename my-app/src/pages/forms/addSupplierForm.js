@@ -48,7 +48,7 @@ function AddSupplierForm() {
       addSupplier(
         { supplier: supplierPayload, token: token() },
         {
-          onSuccess: (res) => {
+          onSettled: (res) => {
             // jika ada value disuplier document add maka add dokumen
             if (
               supplierDocumentData.isoDocument ||
