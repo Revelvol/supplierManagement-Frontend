@@ -13,49 +13,7 @@ function SupplierManagement() {
   const handleUnhideAddSupplier = () => {
     setHideAddSupplier(!hideAddSupplier);
   }
-  const columns = React.useMemo(
-    () => [
-      // {
-      //   Header: 'No',
-      //   accessor: 'id'
-      // },
-      {
-        Header: "Name",
-        accessor: "name", // accessor is the "key" in the data
-      
-      },
-      {
-        Header: "Location",
-        accessor: "location",
-      },
-      {
-        Header: "Phone",
-        accessor: "phone",
-      },
-      {
-        Header: "document",
-        columns: [
-          {
-            Header: "ISO",
-            accessor: "isoDocument",
-          },
-          {
-            Header: "GMP",
-            accessor: "gmpDocument",
-          },
-          {
-            Header: "HACCP",
-            accessor: "haccpDocument",
-          },
-        ],
-      },
-      {
-        Header: "edit",
-        accessor: "edit",
-      },
-    ],
-    []
-  );
+  
   
   const {
     isLoading: supplierLoading,
@@ -103,7 +61,7 @@ function SupplierManagement() {
       {
         hideAddSupplier === false ? <AddSupplierForm /> : ""
       }
-      <SupplierTables columns={columns} data={suppliersWithDocumentData} />
+      <SupplierTables data={suppliersWithDocumentData} />
     </div>
   );
 }

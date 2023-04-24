@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthHeader, useAuthUser} from "react-auth-kit"
+import { ProfileForm } from "../../components/style";
 
 
 const url = "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/me/"
@@ -26,9 +27,6 @@ function Profile() {
         },
         body: JSON.stringify(payload)
     }) ;
-    const data = await response.json()
-
-    console.log(data)
     if(response.ok){
         alert("sucessfully changed")
         setIsEditable(false);
@@ -37,7 +35,7 @@ function Profile() {
     }
   };
   return (
-    <div>
+    <ProfileForm>
       <h2>Profile</h2>
       <form>
         <label>
@@ -79,7 +77,7 @@ function Profile() {
           </button>
         )}
       </form>
-    </div>
+    </ProfileForm>
   );
 }
 

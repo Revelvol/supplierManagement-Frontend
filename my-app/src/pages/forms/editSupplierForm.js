@@ -13,6 +13,7 @@ import BackButton from "../../components/backButton";
 
 import { useQueryClient } from "react-query";
 import { useSuppliersData } from "../query/useSuppliersData";
+import { FormContainer, InputField, InputLabel } from "../../components/style";
 
 function EditSupplierForm(props) {
   const queryClient = useQueryClient();
@@ -23,6 +24,7 @@ function EditSupplierForm(props) {
   const [error, setError] = useState("");
   const token = useAuthHeader();
   const supplierId = props.supplierId;
+  const supplier = props.supplier;
   const {
     mutate: editSupplier,
     isLoading: editSupplierIsLoading,
@@ -44,13 +46,6 @@ function EditSupplierForm(props) {
   const handleHaccpChange = () => {
     setShowHaccp(true);
   };
-
-  const {
-    data: supplier,
-    isLoading: supplierIsLoading,
-    isError: supplierIsError,
-    error: supplierError,
-  } = useSupplierData(supplierId);
 
   const document = {
     data: queryClient.getQueryData(["documentData", parseInt(supplierId)]),
@@ -112,34 +107,30 @@ function EditSupplierForm(props) {
     );
   }
   // docment will loading because of the api issue
-  if (
-    supplierIsLoading ||
-    editSupplierIsLoading ||
-    editSupplierDocumentIsLoading
-  ) {
+  if (editSupplierIsLoading || editSupplierDocumentIsLoading) {
     return "Is Loading... ";
   }
 
-  if (supplierIsError) {
-    return `Something Went Wrong, please refresh the page ${supplierError}`;
-  }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       {error !== "" && <div className="alert alert-danger">{error}</div>}
-      <label> Name </label>
-      <input defaultValue={`${supplier.data.name}`} {...register("name")} />
-      <br></br>
-      <label> Phone </label>
-      <input defaultValue={`${supplier.data.phone}`} {...register("phone")} />
-      <br></br>
-      <label> Phone </label>
-      <input
+      <InputLabel> Name </InputLabel>
+      <InputField
+        defaultValue={`${supplier.data.name}`}
+        {...register("name")}
+      />
+      <InputLabel> Phone </InputLabel>
+      <InputField
+        defaultValue={`${supplier.data.phone}`}
+        {...register("phone")}
+      />
+      <InputLabel> Phone </InputLabel>
+      <InputField
         defaultValue={`${supplier.data.location}`}
         {...register("location")}
       />
-      <br></br>
 
-      <label htmlFor="isoDocument">isoDocument</label>
+      <InputLabel htmlFor="isoDocument">isoDocument</InputLabel>
       {document && document.data.isoDocument ? (
         <>
           <a
@@ -150,8 +141,8 @@ function EditSupplierForm(props) {
             <FaFilePdf />
           </a>
           {!showIso ? <button onClick={handleIsoChange}> Edit </button> : ""}
-          <div style={{ display: showIso ? "block" : "none" }}>
-            <input
+          <div style={{ display: showGmp ? "block" : "none" }}>
+            <InputField
               type="file"
               {...register("IsoDocument")}
               accept="application/pdf"
@@ -159,15 +150,14 @@ function EditSupplierForm(props) {
           </div>
         </>
       ) : (
-        <input
+        <InputField
           type="file"
           {...register("isoDocument")}
           accept="application/pdf"
         />
       )}
 
-      <br></br>
-      <label htmlFor="gmpDocument">gmpDocument</label>
+      <InputLabel htmlFor="gmpDocument">gmpDocument</InputLabel>
       {document && document.data.gmpDocument ? (
         <>
           <a
@@ -195,7 +185,7 @@ function EditSupplierForm(props) {
       )}
 
       <br></br>
-      <label htmlFor="haccpDocument">haccpDocument</label>
+      <InputLabel htmlFor="haccpDocument">haccpDocument</InputLabel>
       {document && document.data.haccpDocument ? (
         <>
           <a
@@ -228,8 +218,8 @@ function EditSupplierForm(props) {
 
       <br></br>
 
-      <input type="submit" />
-    </form>
+      <input className="" type="submit" />
+    </FormContainer>
   );
 }
 

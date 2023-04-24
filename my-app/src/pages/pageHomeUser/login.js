@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { Link, useNavigate } from "react-router-dom";
+import { LoginForm } from "../../components/style";
 
 const getTokenUrl =
   "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/token/";
@@ -84,7 +85,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <LoginForm>
       <h1>Login </h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -94,6 +95,7 @@ function Login() {
             id="email"
             value={email}
             onChange={handleEmailChange}
+            required
           />
         </div>
         <div>
@@ -103,6 +105,7 @@ function Login() {
             id="password"
             value={password}
             onChange={handlePasswordChange}
+            required
           />
         </div>
         <button type="submit">Login</button>
@@ -111,7 +114,7 @@ function Login() {
         demo
       </button>
       <Link to="/register"> Register</Link>
-    </div>
+    </LoginForm>
   );
 }
 

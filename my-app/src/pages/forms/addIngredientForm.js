@@ -6,6 +6,7 @@ import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 import { useAuthHeader } from "react-auth-kit";
 import { useAddIngredientData } from "../query/useIngredientsData";
 import { useAddIngredientsDocumentData } from "../query/useIngredientsDocumentData";
+import { FormContainer, InputField, InputLabel } from "../../components/style";
 
 function AddIngredientForm({ supplierId, setShow }) {
   const token = useAuthHeader();
@@ -93,7 +94,7 @@ function AddIngredientForm({ supplierId, setShow }) {
   return (
     <div>
       Add Ingredient
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} placeholder="Ingredient Name" />
         {errors.name && <span>{errors.name.message}</span>}
         <br></br>
@@ -138,7 +139,7 @@ function AddIngredientForm({ supplierId, setShow }) {
         {pdfInputLabel("allergenDocument")}
 
         <button type="submit">Submit</button>
-      </form>
+      </FormContainer>
     </div>
   );
 }
