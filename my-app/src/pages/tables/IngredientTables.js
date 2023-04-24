@@ -10,69 +10,79 @@ import { GlobalFilter } from "./Filter/globalFilter";
 import { FaFilePdf, FaEdit } from "react-icons/fa";
 import { ColumnFilter, isUsedFilter } from "../tables/Filter/columnFilter";
 import { Link, useLocation } from "react-router-dom";
-import { TableStyles } from "../../components/style";
+import { GlobalFilterStyles, PaginationStyles, TableStyles } from "../../components/style";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import AddIngredientForm from "../forms/addIngredientForm";
 
 function IngredientTables({ data }) {
+  const { supplierId } = useParams();
+  const id = supplierId.split("=")[1];
   const location = useLocation();
   const ingredientData = data;
+  const [showAdd, setShowAdd] = useState(false);
   const column = useMemo(
     () => [
       {
-        Header: "Ingredient Name",
-        accessor: "name",
-        Filter: ColumnFilter,
-      },
-      {
-        Header: "Price ($)",
-        accessor: "price",
-        Filter: ColumnFilter,
-      },
-      {
-        Header: "Quantity",
-        accessor: "quantity",
-        Filter: ColumnFilter,
-      },
-      {
-        Header: "Unit",
-        accessor: "unit",
-        Cell: ({ value }) => {
-          return value.abbreviation;
+        Header:"info",
+        columns:[{
+          Header: "Ingredient Name",
+          accessor: "name",
+          Filter: ColumnFilter,
         },
-        Filter: ColumnFilter,
-        filter: (row, columnIds, filterValue) => {
-          return row.filter((row) =>
-            row.values.unit.abbreviation.includes(filterValue)
-          );
+        {
+          Header: "Price ($)",
+          accessor: "price",
+          Filter: ColumnFilter,
         },
-      },
-      {
-        Header: "Function",
-        accessor: "function",
-        Cell: ({ value }) => {
-          return value.name;
+        {
+          Header: "Quantity",
+          accessor: "quantity",
+          Filter: ColumnFilter,
         },
-        Filter: ColumnFilter,
-        filter: (row, columnIds, filterValue) => {
-          return row.filter((row) =>
-            row.values.function.name.includes(filterValue)
-          );
+        {
+          Header: "Unit",
+          accessor: "unit",
+          Cell: ({ value }) => {
+            return value.abbreviation;
+          },
+          Filter: ColumnFilter,
+          filter: (row, columnIds, filterValue) => {
+            return row.filter((row) =>
+              row.values.unit.abbreviation.includes(filterValue)
+            );
+          },
         },
+        {
+          Header: "Function",
+          accessor: "function",
+          Cell: ({ value }) => {
+            return value.name;
+          },
+          Filter: ColumnFilter,
+          filter: (row, columnIds, filterValue) => {
+            return row.filter((row) =>
+              row.values.function.name.includes(filterValue)
+            );
+          },
+        },
+        {
+          Header: "Is Used",
+          accessor: "is_used",
+          Cell: ({ value }) =>
+            value ? (
+              <div className="d-flex align-items-center justify-content-center h-100 bg-success">
+                <span className="text-center text-white">Used</span>
+              </div>
+            ) : (
+              <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
+                <span className="text-center text-white">Not Used </span>
+              </div>
+            ),
+          Filter: isUsedFilter,
+        },]
       },
-      {
-        Header: "Is Used",
-        accessor: "is_used",
-        Cell: ({ value }) =>
-          value ? (
-            <div className="d-flex align-items-center justify-content-center h-100 bg-success">
-              <span className="text-center text-white">Used</span>
-            </div>
-          ) : (
-            <div className="d-flex align-items-center justify-content-center h-100 bg-danger">
-              <span className="text-center text-white">Not Used </span>
-            </div>
-          ),
-        Filter: isUsedFilter,
-      },
+      
       {
         Header: "Edit",
         accessor: "id",
@@ -243,11 +253,29 @@ function IngredientTables({ data }) {
 
   const { pageIndex, globalFilter, pageSize } = state;
   return (
-    <div>
-      <div className="global-filter-container">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+    <div className="row">
+      
+      <div className="add-ingredient col-6">
+        {showAdd ? (
+          <button className="btn btn-danger" onClick={() => setShowAdd(false)}>Close</button>
+        ) : (
+          <button
+            onClick={() => {
+              setShowAdd(true);
+            }}
+            class="btn btn-info"
+          >
+            Add Ingredient
+          </button>
+        )}
+        {showAdd && (
+          <AddIngredientForm supplierId={id} />
+        )}
       </div>
-      <TableStyles>
+      <GlobalFilterStyles className="global-filter-container col-6">
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      </GlobalFilterStyles>
+      <TableStyles className="col-12">
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -287,7 +315,8 @@ function IngredientTables({ data }) {
             })}
           </tbody>
         </table>
-        <div>
+      </ TableStyles>
+      <PaginationStyles className="col-12">
           {/* allow user to goto certain page */}
           <span>
             Page{" "}
@@ -338,8 +367,7 @@ function IngredientTables({ data }) {
           >
             {">>"}{" "}
           </button>
-        </div>
-      </TableStyles>
+        </PaginationStyles>
     </div>
   );
 }

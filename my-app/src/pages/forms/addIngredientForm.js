@@ -6,7 +6,7 @@ import { INGREDIENT_SCHEMA } from "../../validations/ingredientValidation";
 import { useAuthHeader } from "react-auth-kit";
 import { useAddIngredientData } from "../query/useIngredientsData";
 import { useAddIngredientsDocumentData } from "../query/useIngredientsDocumentData";
-import { FormContainer, InputField, InputLabel } from "../../components/style";
+import { Title } from "../../components/style";
 
 function AddIngredientForm({ supplierId, setShow }) {
   const token = useAuthHeader();
@@ -63,7 +63,7 @@ function AddIngredientForm({ supplierId, setShow }) {
             { data: data, id: res.data.id },
             {
               onSettled: (res) => {
-                // bug the code wont reach here 
+                // bug the code wont reach here
                 console.log("test the code reach here ");
                 if (setShow) {
                   setShow();
@@ -93,53 +93,58 @@ function AddIngredientForm({ supplierId, setShow }) {
   // register("id", )
   return (
     <div>
-      Add Ingredient
-      <FormContainer onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("name")} placeholder="Ingredient Name" />
-        {errors.name && <span>{errors.name.message}</span>}
-        <br></br>
-        <input {...register("price")} placeholder="Price($)" />
-        {errors.price && <span>{errors.price.message}</span>}
-        <br></br>
-        <input {...register("quantity")} placeholder="Quantity" />
-
-        <select {...register("unit")} placeholder="unit">
-          {unitsOption.map((option) => (
-            <option key={option.id} value={JSON.stringify(option)}>
-              {option.abbreviation}
-            </option>
-          ))}
-        </select>
-        {errors.quantity && <span>{errors.quantity.message}</span>}
-        <br></br>
-        {errors.unit && <span>{errors.unit.message}</span>}
-        <select {...register("function")} placeholder="function">
-          {functionsOption.map((option) => (
-            <option key={option.id} value={JSON.stringify(option)}>
-              {option.name}
-            </option>
-          ))}
-        </select>
-        <br></br>
-        {errors.function && <span>{errors.function.message}</span>}
-        <select {...register("is_used")} defaultValue="">
-          <option value="true">used</option>
-          <option value="false">not used </option>
-        </select>
-        <br></br>
-        {errors.is_used && <span>{errors.is_used.message}</span>}
-        <br></br>
-        {pdfInputLabel("isoDocument")}
-        {pdfInputLabel("gmoDocument")}
-        {pdfInputLabel("kosherDocument")}
-        {pdfInputLabel("halalDocument")}
-        {pdfInputLabel("msdsDocument")}
-        {pdfInputLabel("tdsDocument")}
-        {pdfInputLabel("coaDocument")}
-        {pdfInputLabel("allergenDocument")}
+      <Title> Add Ingredient </Title>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="row">
+          <div className="col-6">
+            <input {...register("name")} placeholder="Ingredient Name" />
+            {errors.name && <span>{errors.name.message}</span>}
+            <br></br>
+            <input {...register("price")} placeholder="Price($)" />
+            {errors.price && <span>{errors.price.message}</span>}
+            <br></br>
+            <input {...register("quantity")} placeholder="Quantity" />
+            <select {...register("unit")} placeholder="unit">
+              {unitsOption.map((option) => (
+                <option key={option.id} value={JSON.stringify(option)}>
+                  {option.abbreviation}
+                </option>
+              ))}
+            </select>
+            {errors.quantity && <span>{errors.quantity.message}</span>}
+            <br></br>
+            {errors.unit && <span>{errors.unit.message}</span>}
+            <select {...register("function")} placeholder="function">
+              {functionsOption.map((option) => (
+                <option key={option.id} value={JSON.stringify(option)}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+            <br></br>
+            {errors.function && <span>{errors.function.message}</span>}
+            <select {...register("is_used")} defaultValue="">
+              <option value="true">used</option>
+              <option value="false">not used </option>
+            </select>
+            <br></br>
+            {errors.is_used && <span>{errors.is_used.message}</span>}
+            <br></br>
+          </div>
+          <div className="col-6">
+            {pdfInputLabel("isoDocument")}
+            {pdfInputLabel("gmoDocument")}
+            {pdfInputLabel("kosherDocument")}
+            {pdfInputLabel("halalDocument")}
+            {pdfInputLabel("msdsDocument")}
+            {pdfInputLabel("tdsDocument")}
+            {pdfInputLabel("coaDocument")}
+            {pdfInputLabel("allergenDocument")}
+          </div>
+        </div>
 
         <button type="submit">Submit</button>
-      </FormContainer>
+      </form>
     </div>
   );
 }

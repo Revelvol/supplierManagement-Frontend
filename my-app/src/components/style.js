@@ -1,33 +1,29 @@
 import styled from "styled-components";
 
-export const TableStyles = styled.div`
+export const GlobalFilterStyles = styled.div`
   padding: 1rem;
+  display: flex;
+  justify-content: center;
+`;
 
+
+export const TableStyles = styled.div`
   table {
-    border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
+    border-collapse: collapse;
+    width: 100%;
     th,
     td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
     }
   }
 `;
+
 
 export const LoginForm = styled.div`
   display: flex;
@@ -184,7 +180,7 @@ export const ProfileForm = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 55vh;
 
   h2 {
     font-size: 2rem;
@@ -202,25 +198,28 @@ export const ProfileForm = styled.div`
       flex-direction: column;
       margin-bottom: 1rem;
 
-      input[type="text"], input[type="email"], input[type="checkbox"] {
+      input[type="text"],
+      input[type="email"],
+      input[type="checkbox"] {
         padding: 0.5rem;
         border: 1px solid #ccc;
         border-radius: 0.5rem;
         font-size: 1rem;
-        margin-top: 0.5rem;
+        margin-top: 0.1rem;
 
         &:focus {
           outline: none;
           border-color: #007bff;
         }
 
-        &[readonly], &[disabled] {
+        &[readonly],
+        &[disabled] {
           background-color: #f8f9fa;
         }
       }
 
       input[type="checkbox"] {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
       }
 
       span {
@@ -230,7 +229,6 @@ export const ProfileForm = styled.div`
     }
 
     button[type="button"] {
-      margin-top: 1rem;
       padding: 0.5rem;
       border-radius: 0.5rem;
       background-color: #007bff;
@@ -276,7 +274,6 @@ export const InputField = styled.input`
   padding: 5px;
 `;
 
-
 export const Button = styled.button`
   margin-top: 10px;
   padding: 5px;
@@ -290,7 +287,66 @@ export const Button = styled.button`
   }
 `;
 
- export const Title = styled.h1`
+export const Title = styled.h1`
   font-size: 32px;
   margin-bottom: 24px;
+`;
+
+export const BackButtonDiv = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+
+  svg {
+    margin-right: 0.5rem;
+  }
+`;
+
+export const PaginationStyles = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  button {
+    margin: 0 0.5rem;
+    padding: 0.3rem 0.5rem;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  span {
+    margin: 0 0.5rem;
+  }
+  input {
+    padding: 0.2rem;
+    border: none;
+    border-bottom: 1px solid #333;
+    margin-right: 0.5rem;
+    text-align: center;
+    &:focus {
+      outline: none;
+      border-bottom: 1px solid #666;
+    }
+  }
+  select {
+    margin-left: 1rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    border: none;
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
 `;

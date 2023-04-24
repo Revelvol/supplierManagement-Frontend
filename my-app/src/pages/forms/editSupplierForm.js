@@ -1,4 +1,3 @@
-import { useSupplierData } from "../query/useSupplierData";
 import { useForm } from "react-hook-form";
 import { useAuthHeader } from "react-auth-kit";
 import { FaFilePdf } from "react-icons/fa";
@@ -112,114 +111,114 @@ function EditSupplierForm(props) {
   }
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmit)}>
-      {error !== "" && <div className="alert alert-danger">{error}</div>}
-      <InputLabel> Name </InputLabel>
-      <InputField
-        defaultValue={`${supplier.data.name}`}
-        {...register("name")}
-      />
-      <InputLabel> Phone </InputLabel>
-      <InputField
-        defaultValue={`${supplier.data.phone}`}
-        {...register("phone")}
-      />
-      <InputLabel> Phone </InputLabel>
-      <InputField
-        defaultValue={`${supplier.data.location}`}
-        {...register("location")}
-      />
-
-      <InputLabel htmlFor="isoDocument">isoDocument</InputLabel>
-      {document && document.data.isoDocument ? (
-        <>
-          <a
-            href={document.data.isoDocument}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaFilePdf />
-          </a>
-          {!showIso ? <button onClick={handleIsoChange}> Edit </button> : ""}
-          <div style={{ display: showGmp ? "block" : "none" }}>
-            <InputField
-              type="file"
-              {...register("IsoDocument")}
-              accept="application/pdf"
-            />
-          </div>
-        </>
-      ) : (
+    <div>
+      <BackButton></BackButton>
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        {error !== "" && <div className="alert alert-danger">{error}</div>}
+        <InputLabel> Name </InputLabel>
         <InputField
-          type="file"
-          {...register("isoDocument")}
-          accept="application/pdf"
+          defaultValue={`${supplier.data.name}`}
+          {...register("name")}
+          
         />
-      )}
-
-      <InputLabel htmlFor="gmpDocument">gmpDocument</InputLabel>
-      {document && document.data.gmpDocument ? (
-        <>
-          <a
-            href={document.data.gmpDocument}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaFilePdf />
-          </a>
-          {!showGmp ? <button onClick={handleGmpChange}> Edit </button> : ""}
-          <div style={{ display: showGmp ? "block" : "none" }}>
-            <input
-              type="file"
-              {...register("gmpDocument")}
-              accept="application/pdf"
-            />
-          </div>
-        </>
-      ) : (
-        <input
-          type="file"
-          {...register("gmpDocument")}
-          accept="application/pdf"
+        <InputLabel> Phone </InputLabel>
+        <InputField
+          defaultValue={`${supplier.data.phone}`}
+          {...register("phone")}
+          
         />
-      )}
-
-      <br></br>
-      <InputLabel htmlFor="haccpDocument">haccpDocument</InputLabel>
-      {document && document.data.haccpDocument ? (
-        <>
-          <a
-            href={document.data.haccpDocument}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaFilePdf />
-          </a>
-          {!showHaccp ? (
-            <button onClick={handleHaccpChange}> Edit </button>
-          ) : (
-            ""
-          )}
-          <div style={{ display: showHaccp ? "block" : "none" }}>
-            <input
-              type="file"
-              {...register("haccpDocument")}
-              accept="application/pdf"
-            />
-          </div>
-        </>
-      ) : (
-        <input
-          type="file"
-          {...register("haccpDocument")}
-          accept="application/pdf"
+        <InputLabel> Location </InputLabel>
+        <InputField
+          defaultValue={`${supplier.data.location}`}
+          {...register("location")}
         />
-      )}
-
-      <br></br>
-
-      <input className="" type="submit" />
-    </FormContainer>
+        <InputLabel htmlFor="isoDocument">isoDocument</InputLabel>
+        {document && document.data.isoDocument ? (
+          <>
+            <a
+              href={document.data.isoDocument}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFilePdf />
+            </a>
+            {!showIso ? <button onClick={handleIsoChange}> Edit </button> : ""}
+            <div style={{ display: showGmp ? "block" : "none" }}>
+              <InputField
+                type="file"
+                {...register("IsoDocument")}
+                accept="application/pdf"
+              />
+            </div>
+          </>
+        ) : (
+          <InputField
+            type="file"
+            {...register("isoDocument")}
+            accept="application/pdf"
+          />
+        )}
+        <InputLabel htmlFor="gmpDocument">gmpDocument</InputLabel>
+        {document && document.data.gmpDocument ? (
+          <>
+            <a
+              href={document.data.gmpDocument}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFilePdf />
+            </a>
+            {!showGmp ? <button onClick={handleGmpChange}> Edit </button> : ""}
+            <div style={{ display: showGmp ? "block" : "none" }}>
+              <input
+                type="file"
+                {...register("gmpDocument")}
+                accept="application/pdf"
+              />
+            </div>
+          </>
+        ) : (
+          <input
+            type="file"
+            {...register("gmpDocument")}
+            accept="application/pdf"
+          />
+        )}
+        <br></br>
+        <InputLabel htmlFor="haccpDocument">haccpDocument</InputLabel>
+        {document && document.data.haccpDocument ? (
+          <>
+            <a
+              href={document.data.haccpDocument}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFilePdf />
+            </a>
+            {!showHaccp ? (
+              <button onClick={handleHaccpChange}> Edit </button>
+            ) : (
+              ""
+            )}
+            <div style={{ display: showHaccp ? "block" : "none" }}>
+              <input
+                type="file"
+                {...register("haccpDocument")}
+                accept="application/pdf"
+              />
+            </div>
+          </>
+        ) : (
+          <input
+            type="file"
+            {...register("haccpDocument")}
+            accept="application/pdf"
+          />
+        )}
+        <br></br>
+        <input className="" type="submit" />
+      </FormContainer>
+    </div>
   );
 }
 

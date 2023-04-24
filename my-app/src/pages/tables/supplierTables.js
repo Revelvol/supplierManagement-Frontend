@@ -1,27 +1,36 @@
-import { useTable, useGlobalFilter } from "react-table";
-import styled from "styled-components";
+import { useTable, useGlobalFilter, usePagination } from "react-table";
 import { FaFilePdf, FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { GlobalFilter } from "./Filter/globalFilter";
-import { TableStyles } from "../../components/style";
-
-
+import {
+  GlobalFilterStyles,
+  PaginationStyles,
+  TableStyles,
+  Title,
+} from "../../components/style";
+import { useState } from "react";
+import AddSupplierForm from "../forms/addSupplierForm";
 
 function SupplierTables({ data }) {
   const columns = useMemo(
     () => [
       {
-        Header: "Name",
-        accessor: "name", // accessor is the "key" in the data
-      },
-      {
-        Header: "Location",
-        accessor: "location",
-      },
-      {
-        Header: "Phone",
-        accessor: "phone",
+        Header: "Info",
+        columns: [
+          {
+            Header: "Name",
+            accessor: "name", // accessor is the "key" in the data
+          },
+          {
+            Header: "Location",
+            accessor: "location",
+          },
+          {
+            Header: "Phone",
+            accessor: "phone",
+          },
+        ],
       },
       {
         Header: "document",
@@ -59,13 +68,18 @@ function SupplierTables({ data }) {
         ],
       },
       {
-        Header: "edit",
-        accessor: "edit",
-        Cell: ({ value }) => (
-          <Link to={`/supplier-management/edit/${value}`}>
-            <FaEdit />
-          </Link>
-        ),
+        Header: "utility",
+        columns: [
+          {
+            Header: "edit",
+            accessor: "edit",
+            Cell: ({ value }) => (
+              <Link to={`/supplier-management/edit/${value}`}>
+                <FaEdit />
+              </Link>
+            ),
+          },
+        ],
       },
     ],
     []
@@ -76,54 +90,140 @@ function SupplierTables({ data }) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
     state,
+    // global filter
     setGlobalFilter,
+    // pagination
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
   } = useTable(
     {
       columns,
       data,
+      initialState: {
+        pageIndex: 0,
+      },
     },
-    useGlobalFilter
+    useGlobalFilter,
+    usePagination
   );
 
-  const { globalFilter } = state;
+  const { globalFilter, pageIndex, pageSize } = state;
+  const [hideAddSupplier, setHideAddSupplier] = useState(true);
+  const handleUnhideAddSupplier = () => {
+    setHideAddSupplier(!hideAddSupplier);
+  };
 
   return (
     <>
-      <div className="global-filter-container">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      </div>
-      <TableStyles>
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()} key={i}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
+      <div className="row justify-center">
+        {hideAddSupplier === true ? (
+          <div className="col-6">
+            <button className="btn btn-info " onClick={handleUnhideAddSupplier}>
+              Add Supplier{" "}
+            </button>{" "}
+          </div>
+        ) : (
+          <div className="col-6">
+            <button
+              className="btn btn-danger"
+              onClick={handleUnhideAddSupplier}
+            >
+              Close{" "}
+            </button>{" "}
+            <Title>Add Supplier </Title>
+            <AddSupplierForm />
+          </div>
+        )}
+        <GlobalFilterStyles className="global-filter-container col-6 ">
+          <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+        </GlobalFilterStyles>
+        <TableStyles className="col-12">
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </TableStyles>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row, i) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()} key={i}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableStyles>
+
+        <PaginationStyles className="col-12">
+          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            {"<<"}
+          </button>{" "}
+          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {"<"}
+          </button>{" "}
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            {">"}
+          </button>{" "}
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {">>"}
+          </button>{" "}
+          <span>
+            Page{" "}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{" "}
+          </span>
+          <span>
+            | Go to page:{" "}
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={{ width: "100px" }}
+            />
+          </span>{" "}
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[2, 10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </PaginationStyles>
+      </div>
     </>
   );
 }

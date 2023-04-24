@@ -3,23 +3,14 @@ import { useSuppliersData } from "../query/useSuppliersData";
 import { Link } from "react-router-dom";
 import { useTable, useGlobalFilter } from "react-table";
 import { GlobalFilter } from "../tables/Filter/globalFilter";
-
-const COLUMN = [
-  {
-    Header: "supplier",
-    acessor: "name",
-  },
-];
+import { Title } from "../../components/style";
 
 function IngredientManagement() {
   const {
     isLoading: suppliersIsLoading,
     error: suppliersError,
-    isSuccess: suppliersIsSuccess,
     data: suppliersData,
   } = useSuppliersData();
-  const columns = useMemo(() => COLUMN, []);
-
 
   // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
   // useTable({ columns: columns, data: suppliersData?.data}, useGlobalFilter);
@@ -41,9 +32,9 @@ function IngredientManagement() {
     );
   }
 
-
   return (
     <div>
+      <Title className="text-center">Ingredient Management</Title>
       <ul>
         {suppliersData?.data.map((supplier) => {
           return (
@@ -56,7 +47,6 @@ function IngredientManagement() {
                   {supplier.name}{" "}
                 </Link>
               </div>
-
             </li>
           );
         })}
@@ -90,7 +80,6 @@ function IngredientManagement() {
   //     </tbody>
   //   </table>
   //   </div>
-  
 }
 
 export default IngredientManagement;

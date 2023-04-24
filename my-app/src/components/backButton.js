@@ -1,4 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
+import { BackButtonDiv } from "./style";
+
+
 
 function BackButton() {
   const navigate = useNavigate()
@@ -8,9 +12,12 @@ function BackButton() {
   }
 
   return (
-    <div>
-      <button onClick={handleGoBack}>Go back</button>
-    </div>
+    <BackButtonDiv>
+      <button onClick={handleGoBack}>
+        <FaArrowLeft /> Back 
+      </button>
+    </BackButtonDiv>
+
   );
 }
 
