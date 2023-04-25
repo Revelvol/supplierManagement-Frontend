@@ -1,9 +1,7 @@
-import { useMemo } from "react";
+import { useState } from "react";
 import { useSuppliersData } from "../query/useSuppliersData";
 import { Link } from "react-router-dom";
-import { useTable, useGlobalFilter } from "react-table";
-import { GlobalFilter } from "../tables/Filter/globalFilter";
-import { Title } from "../../components/style";
+import { GlobalFilterStyles, Title } from "../../components/style";
 
 function IngredientManagement() {
   const {
@@ -11,9 +9,7 @@ function IngredientManagement() {
     error: suppliersError,
     data: suppliersData,
   } = useSuppliersData();
-
-  // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-  // useTable({ columns: columns, data: suppliersData?.data}, useGlobalFilter);
+  const [filter, setFilter] = useState("");
 
   if (suppliersIsLoading) {
     return "is loading .... ";
@@ -32,25 +28,34 @@ function IngredientManagement() {
     );
   }
 
+  const handleChange = (e) => {
+    setFilter(e.target.value);
+  };
+
   return (
     <div>
       <Title className="text-center">Ingredient Management</Title>
-      <ul>
-        {suppliersData?.data.map((supplier) => {
-          return (
-            <li id={supplier.id} key={supplier.id}>
-              <div
-                className="open-supplier-ingredient"
-                style={{ cursor: "pointer", fontWeight: "bold" }}
-              >
+      <GlobalFilterStyles>
+        <span>
+          Search : {""}
+          <input onChange={handleChange} />
+        </span>
+      </GlobalFilterStyles>
+      <div className="supplier-list">
+        {suppliersData?.data
+          .filter((supplier) => {
+            return supplier.name.toLowerCase().includes(filter.toLowerCase());
+          })
+          .map((supplier) => {
+            return (
+              <div id={supplier.id} key={supplier.id} className="supplier-box">
                 <Link to={`/ingredient-management/supplier=${supplier.id}`}>
-                  {supplier.name}{" "}
+                  {supplier.name}
                 </Link>
               </div>
-            </li>
-          );
-        })}
-      </ul>
+            );
+          })}
+      </div>
     </div>
   );
 
