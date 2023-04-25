@@ -16,6 +16,19 @@ const fetchSupplierDocumentData = ({ queryKey }) => {
   );
 };
 
+const deleteSupplierData = (data) => {
+  const supplierId = data.supplierId;
+  return axios.delete(
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`,
+
+    {
+      headers: {
+        Authorization: data.token,
+      },
+    }
+  );
+};
+
 const putSupplierData = (data) => {
   const supplierId = data.supplierId;
   return axios.put(
@@ -32,7 +45,6 @@ const putSupplierData = (data) => {
 const patchDocumentData = (data) => {
   const documents = new FormData();
   if (data.payload.isoDocument) {
-    
     documents.append("isoDocument", data.payload.isoDocument);
   }
 
@@ -114,6 +126,17 @@ export const useSupplierDocumentData = (supplierId) => {
       } else {
         return undefined;
       }
+    },
+  });
+};
+
+export const useDeleteSupplierData = (supplierId) => {
+  /* usequery hook to delete supplier data  */
+  const queryClient = useQueryClient();
+  return useMutation(deleteSupplierData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["suppliersData"]);
+      queryClient.removeQueries(["supplierData", parseInt(supplierId)]);
     },
   });
 };

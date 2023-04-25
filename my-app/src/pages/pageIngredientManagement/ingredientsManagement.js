@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSuppliersData } from "../query/useSuppliersData";
 import { Link } from "react-router-dom";
 import { GlobalFilterStyles, Title } from "../../components/style";
+import AddSupplierForm from "../forms/addSupplierForm";
 
 function IngredientManagement() {
   const {
@@ -10,6 +11,7 @@ function IngredientManagement() {
     data: suppliersData,
   } = useSuppliersData();
   const [filter, setFilter] = useState("");
+  const [hideAddSupplier, setHideAddSupplier] = useState(true);
 
   if (suppliersIsLoading) {
     return "is loading .... ";
@@ -31,16 +33,35 @@ function IngredientManagement() {
   const handleChange = (e) => {
     setFilter(e.target.value);
   };
+  const handleUnhideAddSupplier = () => {
+    setHideAddSupplier(!hideAddSupplier);
+  };
 
   return (
     <div>
       <Title className="text-center">Ingredient Management</Title>
+      {hideAddSupplier === true ? (
+        <div className="col-6">
+          <button className="btn btn-info " onClick={handleUnhideAddSupplier}>
+            Add Supplier{" "}
+          </button>{" "}
+        </div>
+      ) : (
+        <div className="col-6">
+          <button className="btn btn-danger" onClick={handleUnhideAddSupplier}>
+            Close{" "}
+          </button>{" "}
+          <Title>Add Supplier </Title>
+          <AddSupplierForm />
+        </div>
+      )}
       <GlobalFilterStyles>
         <span>
           Search : {""}
           <input onChange={handleChange} />
         </span>
       </GlobalFilterStyles>
+      {suppliersData?.data[0] === undefined ? "please add supplier " : ""}
       <div className="supplier-list">
         {suppliersData?.data
           .filter((supplier) => {
@@ -58,33 +79,6 @@ function IngredientManagement() {
       </div>
     </div>
   );
-
-  // return (
-  //   <div>
-  //    <table {...getTableProps()}>
-  //     <thead>
-  //       {headerGroups.map(headerGroup => (
-  //         <tr {...headerGroup.getHeaderGroupProps()}>
-  //           {headerGroup.headers.map(column => (
-  //             <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-  //           ))}
-  //         </tr>
-  //       ))}
-  //     </thead>
-  //     <tbody {...getTableBodyProps()}>
-  //       {rows.map((row, i) => {
-  //         prepareRow(row)
-  //         return (
-  //           <tr {...row.getRowProps()}>
-  //             {row.cells.map(cell => {
-  //               return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-  //             })}
-  //           </tr>
-  //         )
-  //       })}
-  //     </tbody>
-  //   </table>
-  //   </div>
 }
 
 export default IngredientManagement;

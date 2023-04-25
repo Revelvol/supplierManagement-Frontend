@@ -37,6 +37,18 @@ const putIngredientData = ({ data, id }) => {
     }
   );
 };
+const deleteIngredientData = ({ data, id }) => {
+  /* axios request to put ingredient data */
+  return axios.put(
+    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/`,
+    {
+      headers: {
+        Authorization: data.token,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
 const addIngredientData = ({ data }) => {
   /* axios request to add ingredient data */
   const payload = {
@@ -99,12 +111,24 @@ export const useAddIngredientData = () => {
   });
 };
 
+// i think you have to invalidate the individual query too 
 export const usePutIngredientData = () => {
   /* useQuery hook to put existing ingredient */
   const queryClient = useQueryClient();
   return useMutation(putIngredientData, {
     onSuccess: () => {
       queryClient.invalidateQueries("ingredientsData");
+    },
+  });
+};
+
+export const useDeleteIngredientData = (ingredientId) => {
+  /* useQuery hook to put existing ingredient */
+  const queryClient = useQueryClient();
+  return useMutation(deleteIngredientData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("ingredientsData");
+      queryClient.invalidateQueries(["ingredientsData",parseInt(ingredientId)]);
     },
   });
 };
