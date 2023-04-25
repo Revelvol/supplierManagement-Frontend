@@ -37,13 +37,13 @@ const putIngredientData = ({ data, id }) => {
     }
   );
 };
-const deleteIngredientData = ({ data, id }) => {
-  /* axios request to put ingredient data */
-  return axios.put(
+const deleteIngredientData = ({ token, id }) => {
+  /* axios request to delete ingredient data */
+  return axios.delete(
     `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/`,
     {
       headers: {
-        Authorization: data.token,
+        Authorization: token,
         "Content-Type": "application/json",
       },
     }
@@ -122,13 +122,12 @@ export const usePutIngredientData = () => {
   });
 };
 
-export const useDeleteIngredientData = (ingredientId) => {
+export const useDeleteIngredientData = () => {
   /* useQuery hook to put existing ingredient */
   const queryClient = useQueryClient();
   return useMutation(deleteIngredientData, {
     onSuccess: () => {
       queryClient.invalidateQueries("ingredientsData");
-      queryClient.invalidateQueries(["ingredientsData",parseInt(ingredientId)]);
     },
   });
 };

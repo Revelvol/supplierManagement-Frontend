@@ -38,6 +38,7 @@ function SupplierManagement() {
         gmpDocument: documents?.gmpDocument || null,
         haccpDocument: documents?.haccpDocument || null,
         edit: supplier.id,
+        delete:supplier.id
       };
     } catch (error) {
       // error is expected

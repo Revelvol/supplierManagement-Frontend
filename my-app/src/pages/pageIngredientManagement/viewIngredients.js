@@ -3,8 +3,6 @@ import BackButton from "../../components/backButton";
 import { useGetIngredientsData } from "../query/useIngredientsData";
 import { useGetIngredientsDocumentsData } from "../query/useIngredientsDocumentData";
 import IngredientTables from "../tables/IngredientTables";
-import AddIngredientForm from "../forms/addIngredientForm";
-import { useState } from "react";
 
 function ViewIngredients() {
   const { supplierId } = useParams();
@@ -29,6 +27,7 @@ function ViewIngredients() {
         const mergedData = {
           ...ingredient,
           ...documents,
+          delete:ingredient.id
         };
 
         delete mergedData.ingredient;
@@ -40,11 +39,15 @@ function ViewIngredients() {
   );
   const ingredientData = ingredientsWithDocumentData?.filter((ingredient) => {
     if (ingredient?.supplier === parseInt(id)) {
+ 
+    
       return ingredient;
     } else {
       return null;
     }
   });
+
+  console.log(ingredientData)
 
   if (ingredientsIsLoading || documentQueries.some((query) => query.isLoading))
     return <div>Loading...</div>;

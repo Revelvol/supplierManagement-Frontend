@@ -1,5 +1,5 @@
 import { useTable, useGlobalFilter, usePagination } from "react-table";
-import { FaFilePdf, FaEdit } from "react-icons/fa";
+import { FaFilePdf, FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { GlobalFilter } from "./Filter/globalFilter";
@@ -11,8 +11,12 @@ import {
 } from "../../components/style";
 import { useState } from "react";
 import AddSupplierForm from "../forms/addSupplierForm";
+import { useDeleteSupplierData } from "../query/useSupplierData";
+import { useAuthHeader } from "react-auth-kit";
 
 function SupplierTables({ data }) {
+  const token = useAuthHeader()
+  const { mutate: deleteSupplier, isLoading: deleteSupplierIsLoading } = useDeleteSupplierData()
   const columns = useMemo(
     () => [
       {
@@ -71,12 +75,29 @@ function SupplierTables({ data }) {
         Header: "Utility",
         columns: [
           {
-            Header: "edit",
+            Header: "Edit",
             accessor: "edit",
             Cell: ({ value }) => (
               <Link to={`/supplier-management/edit/${value}`}>
                 <FaEdit />
               </Link>
+            ),
+          },
+          {
+            Header: "Delete",
+            accessor: "delete",
+            Cell: ({ value }) => (
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  deleteSupplier({
+                    supplierId:value, 
+                    token : token()
+                  })
+                }}
+              >
+                <FaTrash />
+              </button>
             ),
           },
         ],
@@ -85,7 +106,6 @@ function SupplierTables({ data }) {
     []
   );
 
- 
   const {
     getTableProps,
     getTableBodyProps,
@@ -122,6 +142,9 @@ function SupplierTables({ data }) {
     setHideAddSupplier(!hideAddSupplier);
   };
 
+  if (deleteSupplierIsLoading) {
+    return "is Loading "
+  }
   return (
     <>
       <div className="row justify-center">
