@@ -24,6 +24,7 @@ function AddIngredientForm({ supplierId, setShow }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(INGREDIENT_SCHEMA),
   });
@@ -73,6 +74,7 @@ function AddIngredientForm({ supplierId, setShow }) {
         },
       }
     );
+    reset();
   };
 
   if (

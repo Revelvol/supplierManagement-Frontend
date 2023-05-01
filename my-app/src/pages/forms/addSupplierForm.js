@@ -66,7 +66,7 @@ function AddSupplierForm() {
       );
       setPage(1);
       setError("");
-      reset({});
+      reset();
     } catch (error) {
       setError(error.errors);
     }
