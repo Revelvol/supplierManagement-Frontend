@@ -54,7 +54,9 @@ function AddIngredientForm({ supplierId, setShow }) {
   const functionsOption = functionsData?.data;
   const unitsOption = unitsData?.data;
 
+
   const onSubmit = (data) => {
+    // submit the form but there is a bug here where the ingredient document is not added 
     addIngredient(
       { data: data },
       {

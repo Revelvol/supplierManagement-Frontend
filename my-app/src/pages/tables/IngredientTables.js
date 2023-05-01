@@ -29,7 +29,6 @@ function IngredientTables({ data }) {
   const id = supplierId.split("=")[1];
   const location = useLocation();
   const ingredientData = data;
-  console.log(ingredientData);
   const [showAdd, setShowAdd] = useState(false);
   const column = useMemo(
     () => [

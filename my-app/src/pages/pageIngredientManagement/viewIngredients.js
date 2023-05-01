@@ -47,7 +47,6 @@ function ViewIngredients() {
     }
   });
 
-  console.log(ingredientData)
 
   if (ingredientsIsLoading || documentQueries.some((query) => query.isLoading))
     return <div>Loading...</div>;
