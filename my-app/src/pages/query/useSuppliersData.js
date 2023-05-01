@@ -2,7 +2,7 @@ import { useMutation, useQueries, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
 const supplierUrl =
-  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/";
+  "https://www.revelvolsuppliermanagement.online/api/suppliers/";
 
 const addSupplier = (data) => {
   return fetch(supplierUrl, {
@@ -21,7 +21,7 @@ const addSupplierDocument = (data) => {
   const supplierId = data.supplier;
   const documents = new FormData();
   const token = data.token;
-  const supplierDocumentUrl = `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`;
+  const supplierDocumentUrl = `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplierId}/upload-document/`;
   if (data.documents.isoDocument) {
     documents.append("isoDocument", data.documents.isoDocument);
   }
@@ -80,7 +80,7 @@ export const useDocumentQueries = (supplierData) => {
       queryKey: ["documentData", supplier.id],
       queryFn: () =>
         fetch(
-          `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplier.id}/upload-document/`
+          `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplier.id}/upload-document/`
         ).then((res) => {
           if (!res.ok) {
             return {

@@ -1,7 +1,5 @@
 import SupplierTables from "../tables/supplierTables";
-import { useState } from "react";
 import React from "react";
-import AddSupplierForm from "../forms/addSupplierForm";
 import {
   useDocumentQueries,
   useSuppliersData,
@@ -10,11 +8,6 @@ import { Title } from "../../components/style";
 
 
 function SupplierManagement() {
-  const [hideAddSupplier, setHideAddSupplier] = useState(true);
-
-  const handleUnhideAddSupplier = () => {
-    setHideAddSupplier(!hideAddSupplier);
-  };
 
   const {
     isLoading: supplierLoading,

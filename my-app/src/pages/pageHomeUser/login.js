@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoginForm } from "../../components/style";
 
 const getTokenUrl =
-  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/token/";
+  "https://www.revelvolsuppliermanagement.online/api/user/token/";
 const getUserDetailUrl =
-  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/me/";
+  "https://www.revelvolsuppliermanagement.online/api/user/me/";
 const demoEmail = "example123123@example.com";
 const demoPassword = "123123123";
 

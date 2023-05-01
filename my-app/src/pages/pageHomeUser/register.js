@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import { RegisterForm } from "../../components/style";
 
 const url =
-  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/create/";
+  "https://www.revelvolsuppliermanagement.online/api/user/create/";
 const getTokenUrl =
-  "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/user/token/";
+  "https://www.revelvolsuppliermanagement.online/api/user/token/";
 
 function Register() {
   const [email, setEmail] = useState("");

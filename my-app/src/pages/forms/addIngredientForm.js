@@ -42,7 +42,6 @@ function AddIngredientForm({ supplierId, setShow }) {
   const {
     mutate: addIngredient,
     isLoading: addIngredientIsLoading,
-    error: addIngredientError,
   } = useAddIngredientData();
 
   const {

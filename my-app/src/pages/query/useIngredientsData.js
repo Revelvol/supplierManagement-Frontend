@@ -4,14 +4,14 @@ import { useQueryClient, useQuery, useMutation } from "react-query";
 const fetchIngredientsData = () => {
   /* Fetch all ingredients data  */
   return axios.get(
-    "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/"
+    "https://www.revelvolsuppliermanagement.online/api/ingredients/"
   );
 };
 
 const fetchIngredientData = ({ queryKey }) => {
   const id = queryKey[1];
   return axios.get(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/`
+    `https://www.revelvolsuppliermanagement.online/api/ingredients/${id}/`
   );
 };
 
@@ -27,7 +27,7 @@ const putIngredientData = ({ data, id }) => {
     unit: JSON.parse(data.unit),
   };
   return axios.put(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/`,
+    `https://www.revelvolsuppliermanagement.online/api/ingredients/${id}/`,
     payload,
     {
       headers: {
@@ -40,7 +40,7 @@ const putIngredientData = ({ data, id }) => {
 const deleteIngredientData = ({ token, id }) => {
   /* axios request to delete ingredient data */
   return axios.delete(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/${id}/`,
+    `https://www.revelvolsuppliermanagement.online/api/ingredients/${id}/`,
     {
       headers: {
         Authorization: token,
@@ -61,7 +61,7 @@ const addIngredientData = ({ data }) => {
     unit: JSON.parse(data.unit),
   };
   return axios.post(
-    "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/ingredients/",
+    "https://www.revelvolsuppliermanagement.online/api/ingredients/",
     payload,
     {
       headers: {

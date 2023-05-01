@@ -3,7 +3,7 @@ import { useQueryClient, useQuery } from "react-query";
 
 const fetchFunctionsData = () => {
   return axios.get(
-    "http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/functions/"
+    "https://www.revelvolsuppliermanagement.online/api/functions/"
   );
 };
 

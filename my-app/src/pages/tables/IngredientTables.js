@@ -23,7 +23,7 @@ import { useDeleteIngredientData } from "../query/useIngredientsData";
 
 function IngredientTables({ data }) {
   const token = useAuthHeader();
-  const { mutate: deleteIngredient, isLoading: deleteIngredientIsLoading } =
+  const { mutate: deleteIngredient} =
     useDeleteIngredientData();
   const { supplierId } = useParams();
   const id = supplierId.split("=")[1];

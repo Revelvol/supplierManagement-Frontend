@@ -5,21 +5,21 @@ import axios from "axios";
 const fetchSupplierData = ({ queryKey }) => {
   const supplierId = queryKey[1];
   return axios.get(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`
+    `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplierId}/`
   );
 };
 
 const fetchSupplierDocumentData = ({ queryKey }) => {
   const supplierId = queryKey[1];
   return axios.get(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`
+    `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplierId}/upload-document/`
   );
 };
 
 const deleteSupplierData = (data) => {
   const supplierId = data.supplierId;
   return axios.delete(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`,
+    `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplierId}/`,
 
     {
       headers: {
@@ -32,7 +32,7 @@ const deleteSupplierData = (data) => {
 const putSupplierData = (data) => {
   const supplierId = data.supplierId;
   return axios.put(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/`,
+    `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplierId}/`,
     data.payload,
     {
       headers: {
@@ -58,7 +58,7 @@ const patchDocumentData = (data) => {
 
   const supplierId = data.supplierId;
   return axios.patch(
-    `http://ec2-54-199-2-15.ap-northeast-1.compute.amazonaws.com/api/suppliers/${supplierId}/upload-document/`,
+    `https://www.revelvolsuppliermanagement.online/api/suppliers/${supplierId}/upload-document/`,
     documents,
 
     {
